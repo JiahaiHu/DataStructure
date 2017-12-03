@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
-#include<conio.h>
+#include <conio.h>
 
 FILE *fp;
 char filename[30] = "D:/SqListData.txt";
@@ -50,7 +50,7 @@ int main(void)
 				}
 				else
 				{
-					printf("不能再创建更多的线性表！");
+					printf("不能再创建更多的线性表！\n");
 				}
 
 				printf("输入任意键继续。。。");getch();
@@ -280,7 +280,7 @@ int main(void)
                             scanf("%d", &i);
                             if (ListDelete(*pL, i, e) == OK)
                             {
-                                printf("删除成功！");
+                                printf("删除成功！\n");
                             }
                             else
                             {
@@ -289,7 +289,7 @@ int main(void)
                         }
                         else
                         {
-                            printf("线性表是空表");
+                            printf("线性表是空表！\n");
                         }
                     }
                     else

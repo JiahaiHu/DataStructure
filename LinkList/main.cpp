@@ -294,7 +294,7 @@ int main(void)
  * 初始条件：
  * 操作结果：构造一个空的十字链表
  */
-status InitLists(Lists Lists)
+status InitLists(Lists &Lists)
 {
 	Lists = (ListsNode *)malloc(sizeof(ListsNode));
 	Lists->next = NULL;
@@ -351,7 +351,7 @@ status InsertaList(Lists Lists, LinkList L)
  * 初始条件：线性表L不存在
  * 操作结果：构造一个空的线性表
  */
-status InitaList(LinkList L)
+status InitaList(LinkList &L)
 {
 	L = (LinkList)malloc(sizeof(LNode));
 	if (!L) exit(OVERFLOW);

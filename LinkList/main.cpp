@@ -3,6 +3,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include "LinkList.h"
+#include <conio.h>
 
 FILE *fp;
 char filename[30] = "D:/LinkListData.txt";
@@ -44,52 +45,242 @@ int main(void)
 			{
 				printf("线性表创建失败！\n");
 			}
-			system("pause");
-			//或者： printf("输入任意键继续。。。");  getch();
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 2:
-			printf("\n----DestroyList功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				/*获取L所在ListsNode的前驱结点*/
+				// todo
+				DestroyList(L);
+				/*让前驱结点的next指向后继结点*/
+				// todo
+				printf("线性表销毁成功！\n");
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 3:
-			printf("\n----ClearList功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				ClearList(L);
+				printf("线性表重置成功！\n");
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 4:
-			printf("\n----ListEmpty功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				if (ListEmpty(L))
+				{
+					printf("线性表是空表！\n");
+				}
+				else
+				{
+					printf("线性表不是空表！\n");
+				}
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 5:
-			printf("\n----ListLength功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				printf("线性表长度为%d\n", ListLength(L));
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 6:
-			printf("\n----GetElem功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				printf("请输入元素的位置：\n");
+				scanf("%d", &i);
+				if (GetElem(L, i, e) == OK)
+				{
+					printf("第%d个位置的元素是%d\n", i, e);
+				}
+				else
+				{
+					printf("输入的位置不合法！\n");
+				}
+			}
+			else
+			{
+  	            printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 7:
-			printf("\n----LocateElem功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				printf("请输入需要查询的元素：\n");
+                scanf("%d", &e);
+                i = LocateElem(L, e);
+				if (i)
+				{
+					printf("该元素在第%d个位置！\n", i);
+				}
+				else
+				{
+					printf("线性表中不存在该元素！\n");
+				}
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 8:
-			printf("\n----PriorElem功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				ElemType cur_e, pre_e;
+				printf("请输入需要获得其前驱元素的元素：\n");
+				scanf("%d", &cur_e);
+				if (PriorElem(L, cur_e, pre_e) == OK)
+				{
+					printf("该元素的前驱元素是%d\n", pre_e);
+				}
+				else
+				{
+					printf("线性表中不存在该元素或该元素没有前驱元素！\n");
+				}
+			}
+			else
+			{
+                printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 9:
-			printf("\n----NextElem功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				ElemType cur_e, next_e;
+				printf("请输入需要获得其后继元素的元素：\n");
+				scanf("%d", &cur_e);
+				if (NextElem(L, cur_e, next_e) == OK)
+				{
+					printf("该元素的后继元素是%d\n", next_e);
+				}
+				else
+				{
+					printf("线性表中不存在该元素或该元素没有后继元素！\n");
+				}
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 10:
-			printf("\n----ListInsert功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				printf("请输入插入的位置：\n");
+				scanf("%d", &i);
+				printf("请输入需要插入的元素：\n");
+				scanf("%d", &e);
+				if (ListInsert(L, i, e) == OK)
+				{
+					printf("插入成功！\n");
+				}
+				else
+				{
+					printf("输入的位置不合法！\n");
+				}
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 11:
-			printf("\n----ListDelete功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				if (L->next)
+				{
+					printf("请输入删除的位置：\n");
+					scanf("%d", &i);
+					if (ListDelete(L, i, e) == OK)
+					{
+						printf("删除成功！\n");
+					}
+					else
+					{
+						printf("输入的位置不合法！\n");
+					}
+				}
+				else
+				{
+					printf("线性表是空表！\n");
+				}
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 12:
-			printf("\n----ListTrabverse功能待实现！\n");
-			system("pause");
+			L = SelectList(Lists);
+			if (L)
+			{
+				if (!ListTrabverse(L))
+				{
+					printf("线性表是空表！\n");
+				}
+				else
+				{
+					printf("遍历完成！\n");
+				}
+			}
+			else
+			{
+				printf("线性表不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 13:
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 14:
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 0:
 			break;
@@ -305,7 +496,7 @@ status NextElem(LinkList L, ElemType cur_e, ElemType &next_e)
  * 初始条件：线性表L已存在，1≤i≤ListLength(L)+1
  * 操作结果：在L的第i个位置之前插入新的数据元素e
  */
-status ListInsert(LinkList &L, int i, ElemType e)
+status ListInsert(LinkList L, int i, ElemType e)
 {
 	// 在带头结点的单链线性表L中第i个位置之前插入e
 	LNode *p = L, *q;
@@ -329,7 +520,7 @@ status ListInsert(LinkList &L, int i, ElemType e)
  * 初始条件：线性表L已存在且非空，1≤i≤ListLength(L)
  * 操作结果：删除L的第i个数据元素，用e返回其值
  */
-status ListDelete(LinkList &L, int i, ElemType &e)
+status ListDelete(LinkList L, int i, ElemType &e)
 {
 	LNode *p = L, *q;
 	int j = 0;

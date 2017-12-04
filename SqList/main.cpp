@@ -61,11 +61,13 @@ int main(void)
 				{
 				    if ((*pL).elem)
                     {
+						/*获取删除的位置*/
 						for (i = 0; i < Lists.length; i++)
 						{
 							if (Lists.L + i == pL) break;
 						}
                         DestroyList(*pL);
+						/*后面的线性表前移*/
 						for (int j = i ; j < Lists.length - 1; j++)
 						{
 							Lists.L[i].elem = Lists.L[i + 1].elem;
@@ -304,14 +306,21 @@ int main(void)
 				pL = SelectList(Lists);
 				if (pL)
                 {
-                    if (!ListTrabverse(*pL))
-                    {
-                        printf("线性表是空表！\n");
-                    }
-                    else
-                    {
-                        printf("遍历完成！\n");
-                    }
+					if ((*pL).elem)
+					{
+						if (!ListTrabverse(*pL))
+						{
+							printf("线性表是空表！\n");
+						}
+						else
+						{
+							printf("遍历完成！\n");
+						}
+					}
+					else
+					{
+						printf("线性表不存在！\n");
+					}
                 }
 
 				printf("输入任意键继续。。。");getch();

@@ -315,7 +315,7 @@ LinkList SelectList(Lists Lists)
 	printf("您想对第几个线性表进行该项操作：\n");
 	scanf("%d", &i);
 
-	if (!Lists->next)
+	if (!Lists)
 	{
 		printf("当前没有线性表！\n");
 		return NULL;
@@ -551,7 +551,7 @@ int ListTrabverse(LinkList L)
 
 	for (p = L->next; p != NULL; p = p->next)
 	{
-		printf("%d", p->data);
+		printf("%d\n", p->data);
 		i++;
 	}
 

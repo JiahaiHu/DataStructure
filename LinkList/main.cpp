@@ -477,6 +477,7 @@ status PriorElem(LinkList L, ElemType cur_e, ElemType &pre_e)
 		if (p->next->data == cur_e)
 		{
 			pre_e = p->data;
+			break;
 		}
 	}
 
@@ -497,6 +498,7 @@ status NextElem(LinkList L, ElemType cur_e, ElemType &next_e)
 		if (p->data == cur_e)
 		{
 			next_e = p->next->data;
+			break;
 		}
 	}
 

@@ -335,14 +335,24 @@ LinkList SelectList(Lists Lists)
 
 status InsertaList(Lists Lists, LinkList L)
 {
-	ListsNode *p;
+	ListsNode *p, *q;
 	p = Lists;
 	while (p->next)
 	{
 		p = p->next;
 	}
-	p->L = L;
-	p->next = NULL;
+	if (p->L)
+	{
+		q = (ListsNode *)malloc(sizeof(ListsNode));
+		q->L = L;
+		q->next = NULL;
+		p->next = q;
+	}
+	else
+	{
+		p->L = L;
+		p->next = NULL;
+	}
 
 	return OK;
 }

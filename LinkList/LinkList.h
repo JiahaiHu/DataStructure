@@ -19,6 +19,9 @@ typedef struct ListsNode {      // 十字链表结构
     struct ListsNode *next;
 } ListsNode, *Lists;
 
+status InitLists(Lists Lists);
+LinkList SelectList(Lists Lists);
+status InsertaList(Lists Lists, LinkList L);
 status InitaList(LinkList);
 status DestroyList(LinkList L);
 status ClearList(LinkList L);

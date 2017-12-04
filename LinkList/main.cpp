@@ -51,11 +51,18 @@ int main(void)
 			L = SelectList(Lists);
 			if (L)
 			{
-				/*获取L所在ListsNode的前驱结点*/
-				// todo
-				DestroyList(L);
-				/*让前驱结点的next指向后继结点*/
-				// todo
+				ListsNode *p;
+				if (Lists->L == L) 		// 由于没有设头结点，需要单独判断
+				{
+					Lists = Lists->next;
+					DestroyList(L);
+				}
+				else
+				{
+					p = PriorList(Lists, L);	// 获取L所在ListsNode的前驱结点
+					p->next = p->next->next;	// 让前驱结点的next指向后继结点
+					DestroyList(L);
+				}
 				printf("线性表销毁成功！\n");
 			}
 			else
@@ -374,6 +381,21 @@ status InsertaList(Lists Lists, LinkList L)
 	}
 
 	return OK;
+}
+
+ListsNode * PriorList(Lists Lists, LinkList L)
+{
+	ListsNode *p;
+
+	for (p = Lists; p != NULL; p = p->next)
+	{
+		if (!p->next) return NULL;
+		if (p->next->L == L)
+		{
+			return p;
+		}
+	}
+	return NULL;
 }
 
 /*

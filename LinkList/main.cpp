@@ -277,9 +277,27 @@ int main(void)
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 13:
+			if (SaveData(Lists) == OK)
+			{
+				printf("线性表数据保存成功！\n");
+			}
+			else
+			{
+				printf("线性表数据保存失败！\n");
+			}
+
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 14:
+			if (ReadData(Lists) == OK)
+			{
+				printf("线性表数据读取成功！\n");
+			}
+			else
+			{
+				printf("线性表数据读取失败！\n");
+			}
+
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 0:
@@ -299,6 +317,7 @@ status InitLists(Lists &Lists)
 	Lists = (ListsNode *)malloc(sizeof(ListsNode));
 	Lists->next = NULL;
 	Lists->L = NULL;
+	Lists->length = 0;
 
 	return OK;
 }
@@ -574,16 +593,66 @@ int ListTrabverse(LinkList L)
  * 初始条件：线性表L已存在
  * 操作结果：保存线性表数据
  */
-status SaveData()
+status SaveData(Lists Lists)
 {
-    return OK;
+	ListsNode *p;
+	LNode *q;
+	int i;
+
+	if ((fp = fopen(filename, "wb")) == NULL)
+	{
+		printf("文件打开失败！");
+		return ERROR;
+	}
+	for (p = Lists; p != NULL; p = p->next)
+	{
+		p->length = ListLength(p->L);
+		fwrite(&(p->length), sizeof(int), 1, fp);
+		q = p->L->next;
+		for (i = 0; i < p->length; i++)
+		{
+			fwrite(&(q->data), sizeof(ElemType), 1, fp);
+			q = q->next;
+		}
+	}
+	fclose(fp);
+
+	return OK;
 }
 
 /*
  * 初始条件：线性表L不存在
  * 操作结果：读取线性表数据
  */
-status ReadData()
+status ReadData(Lists Lists)
 {
+	ListsNode *p;
+	LinkList L;
+	LNode *temp, *q;
+	int i;
+
+	if ((fp = fopen(filename, "rb")) == NULL)
+	{
+		printf("文件打开失败");
+		return ERROR;
+	}
+
+	p = (ListsNode *)malloc(sizeof(ListsNode));
+	while (fread(&(p->length), sizeof(int), 1, fp))
+	{
+		L = (LinkList)malloc(sizeof(LNode));
+		q = L;
+		for (i = 0; i < p->length; i++)
+		{
+			temp = (LNode *)malloc(sizeof(LNode));
+			fread(temp, sizeof(ElemType), 1, fp);
+			q->next = temp;
+			q = q->next;
+		}
+		q->next = NULL;
+		InsertaList(Lists, L);
+	}
+	fclose(fp);
+
     return OK;
 }

@@ -34,3 +34,5 @@ status NextElem(LinkList L, ElemType cur, ElemType &next_e);
 status ListInsert(LinkList L, int i, ElemType e);
 status ListDelete(LinkList L, int i, ElemType &e);
 int ListTrabverse(LinkList L);
+status SaveData(Lists Lists);
+status ReadData(Lists Lists);

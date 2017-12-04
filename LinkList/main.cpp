@@ -10,7 +10,7 @@ char filename[30] = "D:/LinkListData.txt";
 
 int main(void)
 {
-	Lists Lists;		// 十字链表头指针
+	Lists Lists = NULL;		// 十字链表头指针
 	LinkList L = NULL;	// 单链表头指针
 	int op = 1;
 	int i;
@@ -309,7 +309,6 @@ status InitLists(Lists Lists)
  */
 LinkList SelectList(Lists Lists)
 {
-	LinkList *L;
 	ListsNode *p;
 	int i, j = 0;
 
@@ -326,7 +325,7 @@ LinkList SelectList(Lists Lists)
 		j++;
 		if (j == i)
 		{
-			printf("第%d个线性表选取成功！\n");
+			printf("第%d个线性表选取成功！\n", i);
 			return p->L;
 		}
 	}
@@ -344,6 +343,8 @@ status InsertaList(Lists Lists, LinkList L)
 	}
 	p->L = L;
 	p->next = NULL;
+
+	return OK;
 }
 
 /*
@@ -563,6 +564,7 @@ int ListTrabverse(LinkList L)
  */
 status SaveData()
 {
+    return OK;
 }
 
 /*
@@ -571,4 +573,5 @@ status SaveData()
  */
 status ReadData()
 {
+    return OK;
 }

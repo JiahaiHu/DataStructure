@@ -1,4 +1,5 @@
 /* Binary Tree */
+#include "LinkQueue.h"
 #include "BinaryTree.h"
 #include <stdio.h>
 #include <malloc.h>
@@ -476,6 +477,28 @@ status Assign(BiTree T, TElemType &e, int value)
  */
 BiTree Parent(BiTree T, TElemType e)
 {
+	if (BiTreeEmpty(T))		// T为空
+	{
+		return NULL;
+	}
+	if (!BiTreeEmpty(T->lchild))
+	{
+		if (e.key == T->lchild->data.key)
+		{
+			return T;
+		}
+		Parent(T->lchild, e);
+	}
+	if (!BiTreeEmpty(T->rchild))
+	{
+		if (e.key == T->rchild->data.key)
+		{
+			return T;
+		}
+		Parent(T->rchild, e);
+	}
+	
+	return NULL;	// T无孩子
 }
 
 /*
@@ -483,7 +506,25 @@ BiTree Parent(BiTree T, TElemType e)
  * 操作结果：返回e的左孩子结点指针。若e无左孩子，则返回NULL
  */
 BiTree LeftChild(BiTree T, TElemType e)
-{
+{	
+	if (!BiTreeEmpty(T))
+	{
+		if (e.key == T->data.key)
+		{
+			if (!BiTreeEmpty(T->lchild))
+			{
+				return T->lchild;
+			}
+			return NULL;
+		}
+		else
+		{
+			LeftChild(T->lchild, e);
+			LeftChild(T->rchild, e);
+		}
+	}
+	
+	return NULL;	// e不在T中或T为空
 }
 
 /*
@@ -491,7 +532,25 @@ BiTree LeftChild(BiTree T, TElemType e)
  * 操作结果：返回e的右孩子结点指针。若e无右孩子，则返回NULL
  */
 BiTree RightChild(BiTree T, TElemType e)
-{
+{	
+	if (!BiTreeEmpty(T))
+	{
+		if (e.key == T->data.key)
+		{
+			if (!BiTreeEmpty(T->rchild))
+			{
+				return T->rchild;
+			}
+			return NULL;
+		}
+		else
+		{
+			RightChild(T->lchild, e);
+			RightChild(T->rchild, e);
+		}
+	}
+	
+	return NULL;	// e不在T中或T为空
 }
 
 /*
@@ -499,7 +558,33 @@ BiTree RightChild(BiTree T, TElemType e)
  * 操作结果：返回e的左兄弟结点指针。若e是T的左孩子或者无左兄弟，则返回NULL
  */
 BiTree LeftSibling(BiTree T, TElemType e)
-{
+{	
+	if (BiTreeEmpty(T)) return NULL;	// T为空
+	if (!BiTreeEmpty(T->lchild))
+	{
+		if (e.key == T->lchild->data.key)	// e是左孩子
+		{
+			return NULL;
+		}
+		Parent(T->lchild, e);
+	}
+	if (!BiTreeEmpty(T->rchild))
+	{
+		if (e.key == T->rchild->data.key)	// e是右孩子
+		{
+			/*
+			if (!BiTreeEmpty(T->lchild))
+			{
+				return T->lchild;
+			}
+			return NULL;	// e无左兄弟
+			*/
+			return T->lchild;
+		}
+		Parent(T->rchild, e);
+	}
+	
+	return NULL;	// T无孩子
 }
 
 /*
@@ -508,14 +593,65 @@ BiTree LeftSibling(BiTree T, TElemType e)
  */
 BiTree RightSibling(BiTree T, TElemType e)
 {
+	if (BiTreeEmpty(T)) return NULL;	// T为空
+	if (!BiTreeEmpty(T->rchild))
+	{
+		if (e.key == T->rchild->data.key)	// e是右孩子
+		{
+			return NULL;
+		}
+		Parent(T->rchild, e);
+	}
+	if (!BiTreeEmpty(T->lchild))
+	{
+		if (e.key == T->lchild->data.key)	// e是左孩子
+		{
+			/*
+			if (!BiTreeEmpty(T->rchild))
+			{
+				return T->rchild;
+			}
+			return NULL;	// e无右兄弟
+			*/
+			return T->rchild;
+		}
+		Parent(T->lchild, e);
+	}
+	
+	return NULL;	// T无孩子
 }
 
 /*
  * 初始条件：二叉树T存在，p指向T中的某个结点，LR为0或1，,非空二叉树c与T不相交且右子树为空
- * 操作结果：根据LR为0或者1，插入c为T中p所指结点的左或右子树，p	所指结点的原有左子树或右子树则为c的右子树
+ * 操作结果：根据LR为0或者1，插入c为T中p所指结点的左或右子树，p所指结点的原有左子树或右子树则为c的右子树
  */
 status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
 {
+	BiTree temp = NULL;
+
+	if (!BiTreeEmpty(T)) return ERROR;	// T为空
+	if (p->key == T->data.key)
+	{
+		if (LR == 0)
+		{
+			temp = T->lchild;
+			T->lchild = c;
+			c->rchild = temp;
+			return OK;
+		}
+		else if (LR == 1)
+		{
+			temp = T->rchild;
+			T->rchild = c;
+			c->rchild = temp;
+			return OK;
+		}
+	}
+	else
+	{
+		InsertChild(T->lchild, p, LR, c);
+		InsertChild(T->rchild, p, LR, c);
+	}
 }
 
 /*
@@ -523,13 +659,32 @@ status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
  * 操作结果：根据LR为0或者1，删除c为T中p所指结点的左或右子树
  */
 status DeleteChild(BiTree T, TElemType *p, int LR)
-{
+{	
+	if (BiTreeEmpty(T)) return ERROR;		// T为空
+	if (!BiTreeEmpty(T->lchild))
+	{
+		if (p->key == T->lchild->data.key)	// c为T的左孩子
+		{
+			DestroyBiTree(T->lchild);		// 销毁c
+		}
+		DeleteChild(T->lchild, p, LR);
+	}
+	if (!BiTreeEmpty(T->rchild))
+	{
+		if (p->key == T->rchild->data.key)	// c为T的右孩子
+		{
+			DestroyBiTree(T->rchild);		// 销毁c
+		}
+		DeleteChild(T->rchild, p, LR);
+	}
+	
+	return ERROR;	// T无孩子
 }
 
 // 最简单的Visit函数
 status PrintElement(TElemType e)
 {
-	printf("%d", e.score);
+	printf("%d\n", e.score);
 	return OK;
 }
 
@@ -617,16 +772,88 @@ status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e))
  */
 status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 {
+	LinkQueue Q;
+	QElemType temp;
+
+	if (!BiTreeEmpty(T))
+	{
+		InitQueue(Q);
+		EnQueue(Q, T);
+		while(!QueueEmpty(Q))
+		{
+			DeQueue(Q, temp);
+			Visit(temp->data);
+			if(!BiTreeEmpty(temp->lchild))
+			{
+				EnQueue(Q, temp->lchild);
+			}  
+            if(!BiTreeEmpty(temp->rchild))
+			{
+				EnQueue(Q, temp->rchild);
+			} 
+		}
+	}
+}
+
+// ----------- 队列的基本操作 ------------
+
+/*
+ * 初始条件：队列Q不存在
+ * 操作结果：构造一个空队列Q
+ */
+status InitQueue(LinkQueue &Q)
+{
+	Q.front = Q.rear = (QueuePtr)malloc(sizeof(QNode));
+	if (!Q.front) exit(OVERFLOW);
+	Q.front->next = NULL;
+	
+	return OK;
+}
+
+/*
+ * 初始条件：队列Q已存在
+ * 操作结果：若Q为空队列，则返回TRUE，否则返回FALSE
+ */
+status QueueEmpty(LinkQueue &Q)
+{
+	if (Q.front == Q.rear) return TRUE;
+	
+	return FALSE;
+}
+
+/*
+ * 初始条件：队列Q已存在
+ * 操作结果：插入元素e为Q的新的队尾元素
+ */
+status EnQueue(LinkQueue &Q, QElemType e)
+{
+	QueuePtr p = NULL;
+
+	p = (QueuePtr)malloc(sizeof(QNode));
+	if (!p) exit(OVERFLOW);
+	p->data = e;
+	p->next = NULL;
+	Q.rear->next = p;
+	
+	return OK;
 }
 
 
+/*
+ * 初始条件：队列Q已存在
+ * 操作结果：删除Q的队头元素，并用e返回其值
+ */
+status DeQueue(LinkQueue &Q, QElemType &e)
+{
+	if (QueueEmpty(Q)) return ERROR;
+	p = Q.front->next;
+	e = p->data;
+	Q.front->next = p->next;
+	if (Q.rear == p)
+	{
+		Q.rear = Q.front;
+	}
+	free(p);
 
-
-
-
-
-
-
-
-
-
+	return OK;
+}

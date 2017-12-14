@@ -1,3 +1,5 @@
+#ifndef _BINARYTREE_H
+
 #define TRUE 1
 #define FALSE 0
 #define OK 1
@@ -51,3 +53,5 @@ status PreOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status InOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e));
+
+#endif

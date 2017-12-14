@@ -6,7 +6,7 @@
 #include <conio.h>
 
 FILE *fp;
-int index = 0;
+int index = 0;		// 创建二叉树中definition数组的index
 char filename[30] = "D:/BinaryTreeData.txt";
 /*
 int main(void)
@@ -323,7 +323,9 @@ int main(void)
  */
 status InitBiTree(BiTree &T)
 {
-
+	T = NULL;
+	
+	return OK;
 }
 
 /*
@@ -332,7 +334,20 @@ status InitBiTree(BiTree &T)
  */
 status DestroyBiTree(BiTree &T)
 {
+	if (BiTreeEmpty(T)) return ERROR;
 
+	if (!BiTreeEmpty(T->lchild))
+	{
+		DestroyBiTree(T->lchild);
+	}
+	if (!BiTreeEmpty(T->rchild))
+	{
+		DestroyBiTree(T->rchild);
+	}
+	free(T);
+	T = NULL;
+
+	return OK;
 }
 
 /*
@@ -342,6 +357,7 @@ status DestroyBiTree(BiTree &T)
 status CreateBiTree(BiTree &T, TElemType definition[10])
 {
 	TElemType e = definition[index];
+	
 	index++;
 	if (!e.score)
 	{
@@ -355,6 +371,7 @@ status CreateBiTree(BiTree &T, TElemType definition[10])
 		CreateBiTree(T->lchild, definition);	// 构造左子树
 		CreateBiTree(T->rchild, definition);	// 构造右子树
 	}
+	
 	return OK;
 }
 
@@ -364,6 +381,12 @@ status CreateBiTree(BiTree &T, TElemType definition[10])
  */
 status ClearBiTree(BiTree &T)
 {
+	if (BiTreeEmpty(T)) return ERROR;
+	ClearBiTree(T->lchild);
+	ClearBiTree(T->rchild);
+	free(T);
+	
+	return OK;
 }
 
 /*
@@ -372,6 +395,9 @@ status ClearBiTree(BiTree &T)
  */
 status BiTreeEmpty(BiTree T)
 {
+	if (!T) return TRUE;
+	
+	return FALSE;
 }
 
 /*
@@ -380,6 +406,14 @@ status BiTreeEmpty(BiTree T)
  */
 int BiTreeDepth(BiTree T)
 {
+	int ldepth, rdepth;
+	
+	if (BiTreeEmpty(T)) return 0;
+	
+	ldepth = BiTreeDepth(T->lchild);
+	rdepth = BiTreeDepth(T->rchild);
+	
+	return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
 }
 
 /*
@@ -388,6 +422,7 @@ int BiTreeDepth(BiTree T)
  */
 BiTree Root(BiTree T)
 {
+	return T;
 }
 
 /*
@@ -396,6 +431,20 @@ BiTree Root(BiTree T)
  */
 int Value(BiTree T, TElemType e)
 {
+	if (!BiTreeEmpty(T))
+	{
+		if (e.key == T->data.key)
+		{
+			return T->data.score;
+		}
+		else
+		{
+			Value(T->lchild, e);
+			Value(T->rchild, e);
+		}
+	}
+	
+	return ERROR;	// e不在T中或T为空
 }
 
 /*
@@ -403,7 +452,22 @@ int Value(BiTree T, TElemType e)
  * 操作结果：结点e赋值为value
  */
 status Assign(BiTree T, TElemType &e, int value)
-{
+{	
+	if (!BiTreeEmpty(T))
+	{
+		if (e.key == T->data.key)
+		{
+			T->data.score = value;
+			return OK;
+		}
+		else
+		{
+			Assign(T->lchild, e, value);
+			Assign(T->rchild, e, value);
+		}
+	}
+	
+	return ERROR;	// e不在T中或T为空
 }
 
 /*
@@ -475,8 +539,7 @@ status PrintElement(TElemType e)
  */
 status PreOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 {
-    // 先序遍历二叉树T的递归算法，对每个数据元素调用函数Visit
-	if (T)
+	if (!BiTreeEmpty(T))
 	{
 		if (Visit(T->data))
 		{
@@ -502,6 +565,24 @@ status PreOrderTraverse(BiTree T, status (*Visit)(TElemType e))
  */
 status InOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 {
+	if (!BiTreeEmpty(T))
+	{
+		if (InOrderTraverse(T->lchild, Visit))
+		{
+			if (Visit(T->data))
+			{
+				if (InOrderTraverse(T->rchild, Visit))
+				{
+					return OK;
+				}
+			}
+		}
+		return ERROR;
+	}
+	else
+	{
+		return OK;
+	}
 }
 
 /*
@@ -509,7 +590,25 @@ status InOrderTraverse(BiTree T, status (*Visit)(TElemType e))
  * 操作结果：后序遍历t，对每个结点调用函数Visit一次且一次，一旦调用失败，则操作失败
  */
 status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e))
-{
+{	
+	if (!BiTreeEmpty(T))
+	{
+		if (PostOrderTraverse(T->lchild, Visit))
+		{
+			if (PostOrderTraverse(T->rchild, Visit))
+			{
+				if (Visit(T->data))
+				{
+					return OK;
+				}
+			}
+		}
+		return ERROR;
+	}
+	else
+	{
+		return OK;
+	}
 }
 
 /*

@@ -417,8 +417,14 @@ status InitaList(LinkList &L)
  */
 status DestroyList(LinkList L)
 {
-	free(L);
-	L = NULL;
+	LinkList temp;
+
+	while (L)
+	{
+		temp = L->next;
+		free(L);
+		L = temp;
+	}
 
 	return OK;
 }

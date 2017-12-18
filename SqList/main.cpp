@@ -70,8 +70,8 @@ int main(void)
 						/*后面的线性表前移*/
 						for (int j = i ; j < Lists.length - 1; j++)
 						{
-							Lists.L[i].elem = Lists.L[i + 1].elem;
-							Lists.L[i].length = Lists.L[i + 1].length;
+							Lists.L[j].elem = Lists.L[j + 1].elem;
+							Lists.L[j].length = Lists.L[j + 1].length;
 						}
 
                         Lists.length--;
@@ -407,7 +407,7 @@ SqList * SelectList(Lists &Lists)
  */
 status InitaList(SqList &L)
 {
-	L.elem = (ElemType *)malloc(LIST_INIT_SIZE & sizeof(ElemType));		// 分配空间
+	L.elem = (ElemType *)malloc(LIST_INIT_SIZE * sizeof(ElemType));		// 分配空间
 	if (!L.elem) exit(OVERFLOW);	// 存储分配失败
 	L.length = 0;					// 空表长度为0
 	L.listsize = LIST_INIT_SIZE;	// 初始存储容量

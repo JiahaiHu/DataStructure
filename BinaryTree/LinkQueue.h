@@ -1,6 +1,6 @@
 #include "BinaryTree.h"
 
-typedef  BiTree QElemType 
+typedef  BiTree QElemType;
 
 typedef struct QNode {
     QElemType T;

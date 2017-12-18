@@ -33,6 +33,9 @@ typedef struct Trees {
     int listsize;
 } Trees;
 
+status InitTrees(Trees &Trees);
+status AddTree(Trees Trees);
+BiTree SelectTree(Trees Trees);
 status InitBiTree(BiTree &T);
 status DestroyBiTree(BiTree &T);
 status CreateBiTree(BiTree &T, TElemType definition[10]);

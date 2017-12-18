@@ -9,11 +9,15 @@
 FILE *fp;
 int index = 0;		// 创建二叉树中definition数组的index
 char filename[30] = "D:/BinaryTreeData.txt";
-/*
+
 int main(void)
 {
+	Trees Trees;
+	BiTree T;
+	int i;
 	int op = 1;
-	// InitTrees(Trees);
+
+	InitTrees(Trees);
 	while (op)
 	{
 		system("cls");
@@ -38,276 +42,53 @@ int main(void)
 		switch (op)
 		{
 		case 1:
-			if (InitBiTree(Trees.elem[Trees.length].BiTree)) == OK)
+			if (Trees.length < Trees.listsize)
 			{
-				Trees.length++;
-				printf("线性表创建成功！\n");
+				if (AddTree(Trees) == OK)
+				{
+					printf("二叉树创建成功！\n");
+				}
 			}
 			else
 			{
-				printf("线性表创建失败！\n");
+				printf("二叉树创建失败！\n");
 			}
+
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 2:
-			L = SelectList(Lists);
-			if (L)
+			T = SelectTree(Trees);
+			if (T)
 			{
-				ListsNode *p;
-				if (Lists->L == L) 		// 由于没有设头结点，需要单独判断
+				/*获取删除的位置*/
+				for (i = 0; i < Trees.length; i++)
 				{
-					Lists = Lists->next;
-					DestroyList(L);
+					if (Trees.elem[i].T == T) break;
+				}
+				if (DestroyBiTree(T) == OK)
+				{
+					/*后面的二叉树前移*/
+					for (int j = i; j < Trees.length - 1; j++)
+					{
+						Trees.elem[j] = Trees.elem[j+1];
+					}
+					Trees.length--;
+					printf("二叉树销毁成功！\n");
 				}
 				else
 				{
-					p = PriorList(Lists, L);	// 获取L所在ListsNode的前驱结点
-					p->next = p->next->next;	// 让前驱结点的next指向后继结点
-					DestroyList(L);
+					printf("二叉树销毁失败！\n");
 				}
-				printf("线性表销毁成功！\n");
 			}
 			else
 			{
-				printf("线性表不存在！\n");
+				printf("二叉树不存在！\n");
 			}
 
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 3:
-			L = SelectList(Lists);
-			if (L)
-			{
-				ClearList(L);
-				printf("线性表重置成功！\n");
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 4:
-			L = SelectList(Lists);
-			if (L)
-			{
-				if (ListEmpty(L))
-				{
-					printf("线性表是空表！\n");
-				}
-				else
-				{
-					printf("线性表不是空表！\n");
-				}
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 5:
-			L = SelectList(Lists);
-			if (L)
-			{
-				printf("线性表长度为%d\n", ListLength(L));
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 6:
-			L = SelectList(Lists);
-			if (L)
-			{
-				printf("请输入元素的位置：\n");
-				scanf("%d", &i);
-				if (GetElem(L, i, e) == OK)
-				{
-					printf("第%d个位置的元素是%d\n", i, e);
-				}
-				else
-				{
-					printf("输入的位置不合法！\n");
-				}
-			}
-			else
-			{
-  	            printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 7:
-			L = SelectList(Lists);
-			if (L)
-			{
-				printf("请输入需要查询的元素：\n");
-                scanf("%d", &e);
-                i = LocateElem(L, e);
-				if (i)
-				{
-					printf("该元素在第%d个位置！\n", i);
-				}
-				else
-				{
-					printf("线性表中不存在该元素！\n");
-				}
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 8:
-			L = SelectList(Lists);
-			if (L)
-			{
-				ElemType cur_e, pre_e;
-				printf("请输入需要获得其前驱元素的元素：\n");
-				scanf("%d", &cur_e);
-				if (PriorElem(L, cur_e, pre_e) == OK)
-				{
-					printf("该元素的前驱元素是%d\n", pre_e);
-				}
-				else
-				{
-					printf("线性表中不存在该元素或该元素没有前驱元素！\n");
-				}
-			}
-			else
-			{
-                printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 9:
-			L = SelectList(Lists);
-			if (L)
-			{
-				ElemType cur_e, next_e;
-				printf("请输入需要获得其后继元素的元素：\n");
-				scanf("%d", &cur_e);
-				if (NextElem(L, cur_e, next_e) == OK)
-				{
-					printf("该元素的后继元素是%d\n", next_e);
-				}
-				else
-				{
-					printf("线性表中不存在该元素或该元素没有后继元素！\n");
-				}
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 10:
-			L = SelectList(Lists);
-			if (L)
-			{
-				printf("请输入插入的位置：\n");
-				scanf("%d", &i);
-				printf("请输入需要插入的元素：\n");
-				scanf("%d", &e);
-				if (ListInsert(L, i, e) == OK)
-				{
-					printf("插入成功！\n");
-				}
-				else
-				{
-					printf("输入的位置不合法！\n");
-				}
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 11:
-			L = SelectList(Lists);
-			if (L)
-			{
-				if (L->next)
-				{
-					printf("请输入删除的位置：\n");
-					scanf("%d", &i);
-					if (ListDelete(L, i, e) == OK)
-					{
-						printf("删除成功！\n");
-					}
-					else
-					{
-						printf("输入的位置不合法！\n");
-					}
-				}
-				else
-				{
-					printf("线性表是空表！\n");
-				}
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 12:
-			L = SelectList(Lists);
-			if (L)
-			{
-				if (!ListTrabverse(L))
-				{
-					printf("线性表是空表！\n");
-				}
-				else
-				{
-					printf("遍历完成！\n");
-				}
-			}
-			else
-			{
-				printf("线性表不存在！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 13:
-			if (SaveData(Lists) == OK)
-			{
-				printf("线性表数据保存成功！\n");
-			}
-			else
-			{
-				printf("线性表数据保存失败！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
-			break;
-		case 14:
-			if (ReadData(Lists) == OK)
-			{
-				printf("线性表数据读取成功！\n");
-			}
-			else
-			{
-				printf("线性表数据读取失败！\n");
-			}
-
-			printf("输入任意键继续。。。");getch();
+			// todo
 			break;
 		case 0:
 			break;
@@ -316,7 +97,46 @@ int main(void)
 	printf("欢迎下次再使用本系统！\n");
 	return 0;
 } //end of main()
-*/
+
+
+status InitTrees(Trees &Trees)
+{
+	Trees.elem = (BinaryTree *)malloc(LIST_INIT_SIZE * sizeof(BinaryTree));
+	if (!Trees.elem) exit(OVERFLOW);
+	Trees.length = 0;
+	Trees.listsize = LIST_INIT_SIZE;
+
+	return OK;
+}
+
+status AddTree(Trees Trees)
+{
+	InitBiTree(Trees.elem[Trees.length].T);
+	Trees.length++;
+}
+
+BiTree SelectTree(Trees Trees)
+{
+	int i;
+
+	printf("您想对第几个二叉树进行该项操作：\n");
+	scanf("%d", &i);
+
+	if (Trees.length == 0)
+	{
+		printf("当前没有二叉树！\n");
+		return NULL;
+	}
+	else if (i > Trees.length)
+	{
+		printf("输入的位置不合法！\n");
+		return NULL;
+	}
+
+	printf("第%d个二叉树选取成功！\n", i);
+
+	return Trees.elem[i-1].T;
+}
 
 /*
  * 初始条件：二叉树T不存在
@@ -566,7 +386,7 @@ BiTree LeftSibling(BiTree T, TElemType e)
 		{
 			return NULL;
 		}
-		Parent(T->lchild, e);
+		LeftSibling(T->lchild, e);
 	}
 	if (!BiTreeEmpty(T->rchild))
 	{
@@ -581,7 +401,7 @@ BiTree LeftSibling(BiTree T, TElemType e)
 			*/
 			return T->lchild;
 		}
-		Parent(T->rchild, e);
+		LeftSibling(T->rchild, e);
 	}
 	
 	return NULL;	// T无孩子
@@ -600,7 +420,7 @@ BiTree RightSibling(BiTree T, TElemType e)
 		{
 			return NULL;
 		}
-		Parent(T->rchild, e);
+		RightSibling(T->rchild, e);
 	}
 	if (!BiTreeEmpty(T->lchild))
 	{
@@ -615,7 +435,7 @@ BiTree RightSibling(BiTree T, TElemType e)
 			*/
 			return T->rchild;
 		}
-		Parent(T->lchild, e);
+		RightSibling(T->lchild, e);
 	}
 	
 	return NULL;	// T无孩子

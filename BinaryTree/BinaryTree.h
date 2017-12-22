@@ -1,4 +1,5 @@
 #ifndef _BINARYTREE_H
+#define _BINARYTREE_H
 
 #define TRUE 1
 #define FALSE 0
@@ -34,12 +35,12 @@ typedef struct Trees {
 } Trees;
 
 status InitTrees(Trees &Trees);
-status AddTree(Trees Trees);
-BiTree SelectTree(Trees Trees);
+status AddTree(Trees &Trees);
+BinaryTree * SelectTree(Trees Trees);
 status InitBiTree(BiTree &T);
 status DestroyBiTree(BiTree &T);
 status CreateBiTree(BiTree &T, TElemType definition[10]);
-status ClearBiTree(BiTree &T);
+status CleanBiTree(BiTree &T);
 status BiTreeEmpty(BiTree T);
 int BiTreeDepth(BiTree T);
 BiTree Root(BiTree T);
@@ -56,5 +57,6 @@ status PreOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status InOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e));
+status PrintElement(TElemType e);
 
 #endif

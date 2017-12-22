@@ -1,6 +1,6 @@
 #include "BinaryTree.h"
 
-typedef  BiTree QElemType;
+typedef BiTree QElemType;
 
 typedef struct QNode {
     QElemType T;
@@ -15,4 +15,4 @@ typedef struct {
 status InitQueue(LinkQueue &Q);
 status QueueEmpty(LinkQueue &Q);
 status EnQueue(LinkQueue &Q, QElemType &e);
-status DeQueue(LinkQueue &Q, QElemType e);
+status DeQueue(LinkQueue &Q, QElemType &e);

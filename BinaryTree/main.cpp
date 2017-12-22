@@ -13,8 +13,10 @@ char filename[30] = "D:/BinaryTreeData.txt";
 int main(void)
 {
 	Trees Trees;
-	BiTree T;
-	int i;
+	BinaryTree *BT;
+	BiTree T, c;
+	int i, score, LR;
+	TElemType e, *definition;
 	int op = 1;
 
 	InitTrees(Trees);
@@ -46,26 +48,26 @@ int main(void)
 			{
 				if (AddTree(Trees) == OK)
 				{
-					printf("二叉树创建成功！\n");
+					printf("二叉树初始化成功！\n");
 				}
 			}
 			else
 			{
-				printf("二叉树创建失败！\n");
+				printf("二叉初始化失败！\n");
 			}
 
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 2:
-			T = SelectTree(Trees);
-			if (T)
+			BT = SelectTree(Trees);
+			if (BT)
 			{
 				/*获取删除的位置*/
 				for (i = 0; i < Trees.length; i++)
 				{
-					if (Trees.elem[i].T == T) break;
+					if (Trees.elem[i].T == BT->T) break;
 				}
-				if (DestroyBiTree(T) == OK)
+				if (DestroyBiTree(BT->T) == OK)
 				{
 					/*后面的二叉树前移*/
 					for (int j = i; j < Trees.length - 1; j++)
@@ -88,7 +90,415 @@ int main(void)
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 3:
-			// todo
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				definition = (TElemType *)malloc(10 * sizeof(TElemType));
+				for (int j = 0; j < 10; j++)
+				{
+					printf("请输入关键字：\n");
+					scanf("%d", &i);
+					if (i == -1) break;
+					definition[j].key = i;
+					if (i != 0)
+					{
+						printf("请输入结点的值：\n");
+						scanf("%d", &score);
+						definition[j].score = score;
+					}
+				}
+				index = 0;
+				if (CreateBiTree(BT->T, definition) == OK)
+				{
+					printf("二叉树创建成功！\n");
+				}
+				else
+				{
+					printf("二叉树创建失败！\n");
+				}
+				free(definition);
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 4:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				if (CleanBiTree(BT->T) == OK)
+				{
+					printf("二叉树清空成功！\n");
+				}
+				else
+				{
+					printf("二叉树清空失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+	
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 5:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				if (BiTreeEmpty(BT->T))
+				{
+					printf("二叉树为空！\n");
+				}
+				else
+				{
+					printf("二叉树不为空！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+		
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 6:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				i = BiTreeDepth(BT->T);
+				printf("二叉树的深度为%d！\n", i);
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+			
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 7:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				c = Root(BT->T);
+				printf("根结点的值为%d！\n", c->data.score);
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 8:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				score = Value(BT->T, e);
+				printf("该结点的值为%d！\n", score);
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 9:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入所要修改的结点的关键字：\n");
+				scanf("%d", &e.key);
+				printf("将该结点的值改为：\n");
+				scanf("%d", &score);
+				if (Assign(BT->T, e, score) == OK)
+				{
+					printf("修改成功！\n");
+				}
+				else
+				{
+					printf("修改失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 10:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				c = Parent(BT->T, e);
+				if (c)
+				{
+					printf("该结点的双亲结点的值为%d！\n", c->data.score);
+				}
+				else
+				{
+					printf("该结点没有双亲结点！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 11:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				c = LeftChild(BT->T, e);
+				if (c)
+				{
+					printf("该结点的左孩子的值为%d！\n", c->data.score);
+				}
+				else
+				{
+					printf("该结点没有左孩子！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 12:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				c = RightChild(BT->T, e);
+				if (c)
+				{
+					printf("该结点的右孩子的值为%d！\n", c->data.score);
+				}
+				else
+				{
+					printf("该结点没有右孩子！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 13:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				c = LeftSibling(BT->T, e);
+				if (c)
+				{
+					printf("该结点的左兄弟的值为%d！\n", c->data.score);
+				}
+				else
+				{
+					printf("该结点没有左兄弟！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 14:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				c = RightSibling(BT->T, e);
+				if (c)
+				{
+					printf("该结点的右兄弟的值为%d！\n", c->data.score);
+				}
+				else
+				{
+					printf("该结点没有右兄弟！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 15:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入插入结点的关键字：");
+				scanf("%d", &e.key);
+				printf("请输入插入左子树还是右子树(0/1)：");
+				scanf("%d", &LR);
+				// 创建子树c
+				definition = (TElemType *)malloc(10 * sizeof(TElemType));
+				for (int j = 0; j < 10; j++)
+				{
+					printf("请输入关键字：");
+					scanf("%d", &i);
+					if (i == -1) break;
+					printf("请输入结点的值：");
+					scanf("%d", &score);
+					definition[j].key = i;
+					definition[j].score = score;
+				}
+				if (CreateBiTree(c, definition) == OK)
+				{
+					printf("二叉树创建成功！\n");
+				}
+				else
+				{
+					printf("二叉树创建失败！\n");
+				}
+				free(definition);
+				if (InsertChild(BT->T, &e, LR, c) == OK)
+				{
+					printf("子树插入成功！\n");
+				}
+				else
+				{
+					printf("子树插入失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 16:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				printf("请输入关键字：");
+				scanf("%d", &e.key);
+				printf("请输入插入左子树还是右子树：");
+				scanf("%d", &LR);
+				if (DeleteChild(BT->T, &e, LR) == OK)
+				{
+					printf("子树删除成功！\n");
+				}
+				else
+				{
+					printf("子树删除失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 17:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				if (PreOrderTraverse(BT->T, PrintElement) == OK)
+				{
+					printf("调用成功！\n");
+				}
+				else
+				{
+					printf("调用失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 18:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				if (InOrderTraverse(BT->T, PrintElement) == OK)
+				{
+					printf("调用成功！\n");
+				}
+				else
+				{
+					printf("调用失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 19:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				if (PostOrderTraverse(BT->T, PrintElement) == OK)
+				{
+					printf("调用成功！\n");
+				}
+				else
+				{
+					printf("调用失败！\n");
+				}
+			}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 20:
+			BT = SelectTree(Trees);
+			if (BT)
+			{
+				if (LevelOrderTraverse(BT->T, PrintElement) == OK)
+				{
+					printf("调用成功！\n");
+				}
+				else
+				{
+					printf("调用失败！\n");
+				}
+		}
+			else
+			{
+				printf("二叉树不存在！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
 			break;
 		case 0:
 			break;
@@ -109,13 +519,14 @@ status InitTrees(Trees &Trees)
 	return OK;
 }
 
-status AddTree(Trees Trees)
+status AddTree(Trees &Trees)
 {
 	InitBiTree(Trees.elem[Trees.length].T);
 	Trees.length++;
+	return OK;
 }
 
-BiTree SelectTree(Trees Trees)
+BinaryTree * SelectTree(Trees Trees)
 {
 	int i;
 
@@ -135,7 +546,7 @@ BiTree SelectTree(Trees Trees)
 
 	printf("第%d个二叉树选取成功！\n", i);
 
-	return Trees.elem[i-1].T;
+	return Trees.elem + i - 1;
 }
 
 /*
@@ -145,7 +556,7 @@ BiTree SelectTree(Trees Trees)
 status InitBiTree(BiTree &T)
 {
 	T = NULL;
-	
+
 	return OK;
 }
 
@@ -178,9 +589,9 @@ status DestroyBiTree(BiTree &T)
 status CreateBiTree(BiTree &T, TElemType definition[10])
 {
 	TElemType e = definition[index];
-	
+
 	index++;
-	if (!e.score)
+	if (e.key == 0)
 	{
 		T = NULL;
 	}
@@ -192,7 +603,7 @@ status CreateBiTree(BiTree &T, TElemType definition[10])
 		CreateBiTree(T->lchild, definition);	// 构造左子树
 		CreateBiTree(T->rchild, definition);	// 构造右子树
 	}
-	
+
 	return OK;
 }
 
@@ -200,13 +611,13 @@ status CreateBiTree(BiTree &T, TElemType definition[10])
  * 初始条件：二叉树T已存在
  * 操作结果：将二叉树T清空
  */
-status ClearBiTree(BiTree &T)
+status CleanBiTree(BiTree &T)
 {
 	if (BiTreeEmpty(T)) return ERROR;
-	ClearBiTree(T->lchild);
-	ClearBiTree(T->rchild);
+	CleanBiTree(T->lchild);
+	CleanBiTree(T->rchild);
 	free(T);
-	
+
 	return OK;
 }
 
@@ -217,7 +628,7 @@ status ClearBiTree(BiTree &T)
 status BiTreeEmpty(BiTree T)
 {
 	if (!T) return TRUE;
-	
+
 	return FALSE;
 }
 
@@ -228,12 +639,12 @@ status BiTreeEmpty(BiTree T)
 int BiTreeDepth(BiTree T)
 {
 	int ldepth, rdepth;
-	
+
 	if (BiTreeEmpty(T)) return 0;
-	
+
 	ldepth = BiTreeDepth(T->lchild);
 	rdepth = BiTreeDepth(T->rchild);
-	
+
 	return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
 }
 
@@ -264,7 +675,7 @@ int Value(BiTree T, TElemType e)
 			Value(T->rchild, e);
 		}
 	}
-	
+
 	return ERROR;	// e不在T中或T为空
 }
 
@@ -273,7 +684,7 @@ int Value(BiTree T, TElemType e)
  * 操作结果：结点e赋值为value
  */
 status Assign(BiTree T, TElemType &e, int value)
-{	
+{
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -287,7 +698,7 @@ status Assign(BiTree T, TElemType &e, int value)
 			Assign(T->rchild, e, value);
 		}
 	}
-	
+
 	return ERROR;	// e不在T中或T为空
 }
 
@@ -317,7 +728,7 @@ BiTree Parent(BiTree T, TElemType e)
 		}
 		Parent(T->rchild, e);
 	}
-	
+
 	return NULL;	// T无孩子
 }
 
@@ -326,7 +737,7 @@ BiTree Parent(BiTree T, TElemType e)
  * 操作结果：返回e的左孩子结点指针。若e无左孩子，则返回NULL
  */
 BiTree LeftChild(BiTree T, TElemType e)
-{	
+{
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -343,7 +754,7 @@ BiTree LeftChild(BiTree T, TElemType e)
 			LeftChild(T->rchild, e);
 		}
 	}
-	
+
 	return NULL;	// e不在T中或T为空
 }
 
@@ -352,7 +763,7 @@ BiTree LeftChild(BiTree T, TElemType e)
  * 操作结果：返回e的右孩子结点指针。若e无右孩子，则返回NULL
  */
 BiTree RightChild(BiTree T, TElemType e)
-{	
+{
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -369,7 +780,7 @@ BiTree RightChild(BiTree T, TElemType e)
 			RightChild(T->rchild, e);
 		}
 	}
-	
+
 	return NULL;	// e不在T中或T为空
 }
 
@@ -378,7 +789,7 @@ BiTree RightChild(BiTree T, TElemType e)
  * 操作结果：返回e的左兄弟结点指针。若e是T的左孩子或者无左兄弟，则返回NULL
  */
 BiTree LeftSibling(BiTree T, TElemType e)
-{	
+{
 	if (BiTreeEmpty(T)) return NULL;	// T为空
 	if (!BiTreeEmpty(T->lchild))
 	{
@@ -403,7 +814,7 @@ BiTree LeftSibling(BiTree T, TElemType e)
 		}
 		LeftSibling(T->rchild, e);
 	}
-	
+
 	return NULL;	// T无孩子
 }
 
@@ -437,7 +848,7 @@ BiTree RightSibling(BiTree T, TElemType e)
 		}
 		RightSibling(T->lchild, e);
 	}
-	
+
 	return NULL;	// T无孩子
 }
 
@@ -472,6 +883,7 @@ status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
 		InsertChild(T->lchild, p, LR, c);
 		InsertChild(T->rchild, p, LR, c);
 	}
+    return OK;
 }
 
 /*
@@ -479,7 +891,7 @@ status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
  * 操作结果：根据LR为0或者1，删除c为T中p所指结点的左或右子树
  */
 status DeleteChild(BiTree T, TElemType *p, int LR)
-{	
+{
 	if (BiTreeEmpty(T)) return ERROR;		// T为空
 	if (!BiTreeEmpty(T->lchild))
 	{
@@ -497,7 +909,7 @@ status DeleteChild(BiTree T, TElemType *p, int LR)
 		}
 		DeleteChild(T->rchild, p, LR);
 	}
-	
+
 	return ERROR;	// T无孩子
 }
 
@@ -505,7 +917,7 @@ status DeleteChild(BiTree T, TElemType *p, int LR)
 status PrintElement(TElemType e)
 {
 	printf("%d\n", e.score);
-	return OK;
+ 	return OK;
 }
 
 /*
@@ -565,7 +977,7 @@ status InOrderTraverse(BiTree T, status (*Visit)(TElemType e))
  * 操作结果：后序遍历t，对每个结点调用函数Visit一次且一次，一旦调用失败，则操作失败
  */
 status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e))
-{	
+{
 	if (!BiTreeEmpty(T))
 	{
 		if (PostOrderTraverse(T->lchild, Visit))
@@ -593,7 +1005,7 @@ status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 {
 	LinkQueue Q;
-	QElemType temp;
+	QElemType temp = NULL;
 
 	if (!BiTreeEmpty(T))
 	{
@@ -606,13 +1018,15 @@ status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 			if(!BiTreeEmpty(temp->lchild))
 			{
 				EnQueue(Q, temp->lchild);
-			}  
+			}
             if(!BiTreeEmpty(temp->rchild))
 			{
 				EnQueue(Q, temp->rchild);
-			} 
+			}
 		}
+		return OK;
 	}
+	return ERROR;
 }
 
 // ----------- 队列的基本操作 ------------
@@ -626,7 +1040,7 @@ status InitQueue(LinkQueue &Q)
 	Q.front = Q.rear = (QueuePtr)malloc(sizeof(QNode));
 	if (!Q.front) exit(OVERFLOW);
 	Q.front->next = NULL;
-	
+
 	return OK;
 }
 
@@ -637,7 +1051,7 @@ status InitQueue(LinkQueue &Q)
 status QueueEmpty(LinkQueue &Q)
 {
 	if (Q.front == Q.rear) return TRUE;
-	
+
 	return FALSE;
 }
 
@@ -645,16 +1059,17 @@ status QueueEmpty(LinkQueue &Q)
  * 初始条件：队列Q已存在
  * 操作结果：插入元素e为Q的新的队尾元素
  */
-status EnQueue(LinkQueue &Q, QElemType e)
+status EnQueue(LinkQueue &Q, QElemType &e)
 {
 	QueuePtr p = NULL;
 
 	p = (QueuePtr)malloc(sizeof(QNode));
 	if (!p) exit(OVERFLOW);
-	p->data = e;
+	p->T = e;
 	p->next = NULL;
 	Q.rear->next = p;
-	
+	Q.rear = p;
+
 	return OK;
 }
 
@@ -665,9 +1080,10 @@ status EnQueue(LinkQueue &Q, QElemType e)
  */
 status DeQueue(LinkQueue &Q, QElemType &e)
 {
+    QNode *p;
 	if (QueueEmpty(Q)) return ERROR;
 	p = Q.front->next;
-	e = p->data;
+	e = p->T;
 	Q.front->next = p->next;
 	if (Q.rear == p)
 	{

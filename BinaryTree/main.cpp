@@ -14,7 +14,7 @@ int main(void)
 {
 	Trees Trees;
 	BinaryTree *BT;
-	BiTree T, c;
+	BiTree c;
 	int i, score, LR;
 	TElemType e, *definition;
 	int op = 1;
@@ -145,7 +145,7 @@ int main(void)
 
 			printf("输入任意键继续。。。");getch();
 			break;
-	
+
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 5:
@@ -165,7 +165,7 @@ int main(void)
 			{
 				printf("二叉树不存在！\n");
 			}
-		
+
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 6:
@@ -179,7 +179,7 @@ int main(void)
 			{
 				printf("二叉树不存在！\n");
 			}
-			
+
 			printf("输入任意键继续。。。");getch();
 			break;
 		case 7:
@@ -402,7 +402,7 @@ int main(void)
 			{
 				printf("请输入关键字：");
 				scanf("%d", &e.key);
-				printf("请输入插入左子树还是右子树：");
+				printf("请输入删除左子树还是右子树(0/1)：");
 				scanf("%d", &LR);
 				if (DeleteChild(BT->T, &e, LR) == OK)
 				{
@@ -663,6 +663,8 @@ BiTree Root(BiTree T)
  */
 int Value(BiTree T, TElemType e)
 {
+	int lvalue, rvalue;
+
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -671,12 +673,14 @@ int Value(BiTree T, TElemType e)
 		}
 		else
 		{
-			Value(T->lchild, e);
-			Value(T->rchild, e);
+			lvalue = Value(T->lchild, e);
+			rvalue = Value(T->rchild, e);
+			if (lvalue != -1) return lvalue;
+			if (rvalue != -1) return rvalue;
 		}
 	}
 
-	return ERROR;	// e不在T中或T为空
+	return -1;	// e不在T中或T为空
 }
 
 /*
@@ -685,6 +689,7 @@ int Value(BiTree T, TElemType e)
  */
 status Assign(BiTree T, TElemType &e, int value)
 {
+	status lstatus, rstatus;
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -694,8 +699,10 @@ status Assign(BiTree T, TElemType &e, int value)
 		}
 		else
 		{
-			Assign(T->lchild, e, value);
-			Assign(T->rchild, e, value);
+			lstatus = Assign(T->lchild, e, value);
+			rstatus = Assign(T->rchild, e, value);
+			if (lstatus != ERROR) return lstatus;
+			if (rstatus != ERROR) return rstatus;
 		}
 	}
 
@@ -860,7 +867,7 @@ status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
 {
 	BiTree temp = NULL;
 
-	if (!BiTreeEmpty(T)) return ERROR;	// T为空
+	if (BiTreeEmpty(T)) return ERROR;	// T为空
 	if (p->key == T->data.key)
 	{
 		if (LR == 0)
@@ -898,6 +905,7 @@ status DeleteChild(BiTree T, TElemType *p, int LR)
 		if (p->key == T->lchild->data.key)	// c为T的左孩子
 		{
 			DestroyBiTree(T->lchild);		// 销毁c
+			return OK;
 		}
 		DeleteChild(T->lchild, p, LR);
 	}
@@ -906,6 +914,7 @@ status DeleteChild(BiTree T, TElemType *p, int LR)
 		if (p->key == T->rchild->data.key)	// c为T的右孩子
 		{
 			DestroyBiTree(T->rchild);		// 销毁c
+			return OK;
 		}
 		DeleteChild(T->rchild, p, LR);
 	}

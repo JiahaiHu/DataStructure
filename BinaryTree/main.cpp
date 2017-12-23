@@ -363,17 +363,22 @@ int main(void)
 				definition = (TElemType *)malloc(10 * sizeof(TElemType));
 				for (int j = 0; j < 10; j++)
 				{
-					printf("请输入关键字：");
+					printf("请输入关键字：\n");
 					scanf("%d", &i);
 					if (i == -1) break;
-					printf("请输入结点的值：");
-					scanf("%d", &score);
 					definition[j].key = i;
-					definition[j].score = score;
+					if (i != 0)
+					{
+						printf("请输入结点的值：\n");
+						scanf("%d", &score);
+						definition[j].score = score;
+					}
 				}
+				index = 0;
 				if (CreateBiTree(c, definition) == OK)
 				{
 					printf("二叉树创建成功！\n");
+					PreOrderTraverse(c, PrintElement);
 				}
 				else
 				{
@@ -715,6 +720,8 @@ status Assign(BiTree T, TElemType &e, int value)
  */
 BiTree Parent(BiTree T, TElemType e)
 {
+	BiTree l, r;
+
 	if (BiTreeEmpty(T))		// T为空
 	{
 		return NULL;
@@ -725,7 +732,6 @@ BiTree Parent(BiTree T, TElemType e)
 		{
 			return T;
 		}
-		Parent(T->lchild, e);
 	}
 	if (!BiTreeEmpty(T->rchild))
 	{
@@ -733,9 +739,12 @@ BiTree Parent(BiTree T, TElemType e)
 		{
 			return T;
 		}
-		Parent(T->rchild, e);
 	}
-
+	l = Parent(T->lchild, e);
+	r = Parent(T->rchild, e);
+	if (l != NULL) return l;
+	if (r != NULL) return r;
+	
 	return NULL;	// T无孩子
 }
 
@@ -745,6 +754,8 @@ BiTree Parent(BiTree T, TElemType e)
  */
 BiTree LeftChild(BiTree T, TElemType e)
 {
+	BiTree l, r;
+
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -757,8 +768,10 @@ BiTree LeftChild(BiTree T, TElemType e)
 		}
 		else
 		{
-			LeftChild(T->lchild, e);
-			LeftChild(T->rchild, e);
+			l = LeftChild(T->lchild, e);
+			r = LeftChild(T->rchild, e);
+			if (l != NULL) return l;
+			if (r != NULL) return r;
 		}
 	}
 
@@ -771,6 +784,8 @@ BiTree LeftChild(BiTree T, TElemType e)
  */
 BiTree RightChild(BiTree T, TElemType e)
 {
+	BiTree l, r;
+
 	if (!BiTreeEmpty(T))
 	{
 		if (e.key == T->data.key)
@@ -783,8 +798,10 @@ BiTree RightChild(BiTree T, TElemType e)
 		}
 		else
 		{
-			RightChild(T->lchild, e);
-			RightChild(T->rchild, e);
+			l = RightChild(T->lchild, e);
+			r = RightChild(T->rchild, e);
+			if (l != NULL) return l;
+			if (r != NULL) return r;
 		}
 	}
 
@@ -797,6 +814,8 @@ BiTree RightChild(BiTree T, TElemType e)
  */
 BiTree LeftSibling(BiTree T, TElemType e)
 {
+	BiTree l, r;
+
 	if (BiTreeEmpty(T)) return NULL;	// T为空
 	if (!BiTreeEmpty(T->lchild))
 	{
@@ -804,7 +823,6 @@ BiTree LeftSibling(BiTree T, TElemType e)
 		{
 			return NULL;
 		}
-		LeftSibling(T->lchild, e);
 	}
 	if (!BiTreeEmpty(T->rchild))
 	{
@@ -819,8 +837,11 @@ BiTree LeftSibling(BiTree T, TElemType e)
 			*/
 			return T->lchild;
 		}
-		LeftSibling(T->rchild, e);
 	}
+	l = LeftSibling(T->lchild, e);
+	r = LeftSibling(T->rchild, e);
+	if (l != NULL) return l;
+	if (r != NULL) return r;
 
 	return NULL;	// T无孩子
 }
@@ -831,6 +852,8 @@ BiTree LeftSibling(BiTree T, TElemType e)
  */
 BiTree RightSibling(BiTree T, TElemType e)
 {
+	BiTree l, r;
+
 	if (BiTreeEmpty(T)) return NULL;	// T为空
 	if (!BiTreeEmpty(T->rchild))
 	{
@@ -838,7 +861,6 @@ BiTree RightSibling(BiTree T, TElemType e)
 		{
 			return NULL;
 		}
-		RightSibling(T->rchild, e);
 	}
 	if (!BiTreeEmpty(T->lchild))
 	{
@@ -853,8 +875,11 @@ BiTree RightSibling(BiTree T, TElemType e)
 			*/
 			return T->rchild;
 		}
-		RightSibling(T->lchild, e);
 	}
+	l = RightSibling(T->lchild, e);
+	r = RightSibling(T->rchild, e);
+	if (l != NULL) return l;
+	if (r != NULL) return r;
 
 	return NULL;	// T无孩子
 }
@@ -866,6 +891,7 @@ BiTree RightSibling(BiTree T, TElemType e)
 status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
 {
 	BiTree temp = NULL;
+	status l, r;
 
 	if (BiTreeEmpty(T)) return ERROR;	// T为空
 	if (p->key == T->data.key)
@@ -887,10 +913,12 @@ status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
 	}
 	else
 	{
-		InsertChild(T->lchild, p, LR, c);
-		InsertChild(T->rchild, p, LR, c);
+		l = InsertChild(T->lchild, p, LR, c);
+		r = InsertChild(T->rchild, p, LR, c);
+		if (l != ERROR) return l;
+		if (r != ERROR) return r;
 	}
-    return OK;
+    return ERROR;
 }
 
 /*
@@ -899,24 +927,28 @@ status InsertChild(BiTree T, TElemType *p, int LR, BiTree c)
  */
 status DeleteChild(BiTree T, TElemType *p, int LR)
 {
+	status l, r;
+
 	if (BiTreeEmpty(T)) return ERROR;		// T为空
-	if (!BiTreeEmpty(T->lchild))
+	if (p->key == T->data.key)
 	{
-		if (p->key == T->lchild->data.key)	// c为T的左孩子
+		if (LR == 0)
 		{
 			DestroyBiTree(T->lchild);		// 销毁c
 			return OK;
 		}
-		DeleteChild(T->lchild, p, LR);
-	}
-	if (!BiTreeEmpty(T->rchild))
-	{
-		if (p->key == T->rchild->data.key)	// c为T的右孩子
+		if (LR == 1)
 		{
 			DestroyBiTree(T->rchild);		// 销毁c
 			return OK;
 		}
-		DeleteChild(T->rchild, p, LR);
+	}
+	else
+	{
+		l = DeleteChild(T->lchild, p, LR);
+		r = DeleteChild(T->rchild, p, LR);
+		if (l != ERROR) return l;
+		if (r != ERROR) return r;
 	}
 
 	return ERROR;	// T无孩子

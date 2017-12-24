@@ -5,6 +5,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <string.h>
 
 FILE *fp;
 int index = 0;		// 创建二叉树中definition数组的index
@@ -203,7 +204,14 @@ int main(void)
 				printf("请输入关键字：");
 				scanf("%d", &e.key);
 				score = Value(BT->T, e);
-				printf("该结点的值为%d！\n", score);
+				if (score != -1)
+				{
+					printf("该结点的值为%d！\n", score);
+				}
+				else
+				{
+					printf("不存在该结点！\n");
+				}
 			}
 			else
 			{
@@ -526,8 +534,21 @@ status InitTrees(Trees &Trees)
 
 status AddTree(Trees &Trees)
 {
+	char name[20];
 	InitBiTree(Trees.elem[Trees.length].T);
+	printf("请输入二叉树的名称：");
+	scanf("%s", name);
+	strcpy(Trees.elem[Trees.length].name, name);
 	Trees.length++;
+	return OK;
+}
+
+status ShowTrees(Trees Trees)
+{
+	for (int i = 0; i < Trees.length; i++)
+	{
+		printf("%d:%s\n", i+1, Trees.elem[i].name);
+	}
 	return OK;
 }
 
@@ -535,6 +556,7 @@ BinaryTree * SelectTree(Trees Trees)
 {
 	int i;
 
+	ShowTrees(Trees);
 	printf("您想对第几个二叉树进行该项操作：\n");
 	scanf("%d", &i);
 

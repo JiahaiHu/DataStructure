@@ -57,6 +57,8 @@ status PreOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status InOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status PostOrderTraverse(BiTree T, status (*Visit)(TElemType e));
 status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e));
+status SaveData(Trees Trees);
+status ReadData(Trees &Trees);
 status PrintElement(TElemType e);
 
 #endif

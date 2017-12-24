@@ -513,6 +513,30 @@ int main(void)
 
 			printf("输入任意键继续。。。");getch();
 			break;
+		case 21:
+			if (SaveData(Trees) == OK)
+			{
+				printf("数据保存成功！\n");
+			}
+			else
+			{
+				printf("数据保存失败！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
+		case 22:
+			if (ReadData(Trees) == OK)
+			{
+				printf("数据读取成功！\n");
+			}
+			else
+			{
+				printf("数据读取失败！\n");
+			}
+
+			printf("输入任意键继续。。。");getch();
+			break;
 		case 0:
 			break;
 		} //end of switch
@@ -1090,6 +1114,97 @@ status LevelOrderTraverse(BiTree T, status (*Visit)(TElemType e))
 		return OK;
 	}
 	return ERROR;
+}
+
+int NumberOfNodes(BiTree T)
+{
+	int num = 0;
+	if (T == NULL) 
+	{
+		return 1;
+	}
+	else
+	{
+		num = NumberOfNodes(T->lchild) + NumberOfNodes(T->rchild) + 1;
+	}
+
+	return num;
+}
+status PreOrderWrite(BiTree T, FILE *fp)
+{
+	int zero = 0;
+	if (!BiTreeEmpty(T))
+	{
+		fwrite(&T->data.key, sizeof(int), 1, fp);
+		fwrite(&T->data.score, sizeof(int), 1, fp);
+		if (PreOrderWrite(T->lchild, fp))
+		{
+			if (PreOrderWrite(T->rchild, fp))
+			{
+				return OK;
+			}
+		}
+		return ERROR;
+	}
+	else
+	{	
+		fwrite(&zero, sizeof(int), 1, fp);
+		fwrite(&zero, sizeof(int), 1, fp);
+		return OK;
+	}
+}
+
+status SaveData(Trees Trees)
+{
+	int i, num;
+
+	if ((fp = fopen(filename, "wb")) == NULL)
+	{
+		printf("文件打开失败！\n");
+		return ERROR;
+	}
+	fwrite(&(Trees.length), sizeof(int), 1, fp);	// 写入二叉树个数
+	for (i = 0; i < Trees.length; i++)
+	{
+		fwrite(Trees.elem[i].name, sizeof(char), 20, fp);	// 写入二叉树名称
+		num = NumberOfNodes(Trees.elem[i].T);
+		fwrite(&num, sizeof(int), 1, fp);			// 写入二叉树结点个数
+		PreOrderWrite(Trees.elem[i].T, fp);
+		// fwrite(-1, sizeof(int), 1, fp);
+	}
+	fclose(fp);
+	return OK;
+}
+
+status ReadData(Trees &Trees)
+{
+	int length, i, num;
+	TElemType *definition;
+
+	if ((fp = fopen(filename, "rb")) == NULL)
+	{
+		printf("文件打开失败！\n");
+		return ERROR;
+	}
+	fread(&length, sizeof(int), 1, fp);
+	Trees.length = length;
+	for (i = 0; i < length; i++)
+	{
+		fread(Trees.elem[i].name, sizeof(char), 20, fp);
+		fread(&num, sizeof(int), 1, fp);
+		definition = (TElemType *)malloc((num + 1) * sizeof(TElemType));
+		for (int j = 0; j < num; j++)
+		{
+			fread(&(definition[j].key), sizeof(int), 1, fp);
+			fread(&(definition[j].score), sizeof(int), 1, fp);
+		}
+		definition[num].key = -1;
+		index = 0;
+		CreateBiTree(Trees.elem[i].T, definition);
+		free(definition);
+	}
+	fclose(fp);
+	return OK;
 }
 
 // ----------- 队列的基本操作 ------------

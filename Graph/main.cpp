@@ -25,6 +25,7 @@ status CreateGraph(ALGraph &G, VertexType V[MAX_VERTEX_NUM], int VR[MAX_VERTEX_N
     {
         for (int j = 0; j < G.vexnum; j++)
         {
+            // 邻接链表中的顶点位置先大后小
             if (VR[i][j])      // i,j之间有弧
             {
                 if (G.vertices[i].firstarc == NULL)     // 是第一条依附该顶点的弧
@@ -102,7 +103,7 @@ VertexType GetVex(ALGraph G, int v)
  * 初始条件：图G存在，v是G中的某个顶点
  * 操作结果：对v赋值value
  */
-status PutVex(ALGraph &G, int v, VertexType value)
+status PutVex(ALGraph &G, Index v, VertexType value)
 {
     G.vertices[v].data = value;
 
@@ -115,7 +116,25 @@ status PutVex(ALGraph &G, int v, VertexType value)
  */
 VertexType FirstAdjVex(ALGraph G, VertexType v)
 {
+    ArcNode *firstarc;
 
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        if (G.vertices[i].data == v)
+        {
+            firstarc = G.vertices[i].firstarc;
+            if (firstarc)
+            {
+                return G.vertices[firstarc->adjvex].data;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+
+    return 0;
 }
 
 /*
@@ -124,7 +143,31 @@ VertexType FirstAdjVex(ALGraph G, VertexType v)
  */
 VertexType NextAdjVex(ALGraph G, VertexType v, VertexType w)
 {
+    ArcNode *arc, *nextarc;
 
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        if (G.vertices[i].data == v)
+        {
+            for (arc = G.vertices[i].firstarc; arc != NULL; arc = arc->nextarc)
+            {
+                if (G.vertices[arc->adjvex].data == w)
+                {
+                    nextarc = arc->nextarc;
+                    if (nextarc)
+                    {
+                        return G.vertices[arc->nextarc->adjvex].data;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
 }
 
 /*
@@ -133,7 +176,13 @@ VertexType NextAdjVex(ALGraph G, VertexType v, VertexType w)
  */
 status InsertVex(ALGraph &G, VertexType v)
 {
+    if (G.vexnum > MAX_VERTEX_NUM) return ERROR;
 
+    G.vertices[G.vexnum].data = v;
+    G.vertices[G.vexnum].firstarc = NULL;
+    G.vexnum++;
+
+    return OK;
 }
 
 /*
@@ -142,25 +191,97 @@ status InsertVex(ALGraph &G, VertexType v)
  */
 status DeleteVex(ALGraph &G, VertexType v)
 {
+    Index index = 0;
+    ArcNode *arc;
 
+    // 获取顶点v的位置
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        if (G.vertices[i].data == v)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    // 删除顶点v
+    for (int i = index; i < G.vexnum - 1; i++)
+    {
+        G.vertices[i] = G.vertices[i + 1];
+    }
+    G.vexnum--;
+
+    // 删除各顶点邻接链表中与v相关的弧
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        DeleteArc(G, i, index);
+    }
+    // 更新邻接链表中删除顶点后面的顶点位置信息
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        for (arc = G.vertices[i].firstarc; arc != NULL; arc = arc->nextarc)
+        {
+            if (arc->adjvex > index)
+            {
+                arc->adjvex--;
+            }
+            else break;
+        }
+    }
+
+    return OK;
 }
 
 /*
  * 初始条件：图G存在，v、w是G的顶点
  * 操作结果：在图G中增加弧<v,w>，如果图G是无向图，还需要增加<w,v>
  */
-status InsertArc(ALGraph &G, VertexType v, VertexType w)
+status InsertArc(ALGraph &G, Index v, Index w)
 {
-
+    ArcNode *arc, *temp;
+    for (arc = G.vertices[v].firstarc; arc != NULL; arc = arc->nextarc)
+    {
+        if (arc->adjvex > w)
+        {
+            if (!arc->nextarc || arc->nextarc->adjvex < w)
+            {
+                temp = (ArcNode *)malloc(sizeof(ArcNode));
+                temp->adjvex = w;
+                temp->nextarc = arc->nextarc;
+                arc->nextarc = temp;
+                return OK;
+            }
+        }
+    }
+    return ERROR;
 }
 
 /*
  * 初始条件：图G存在，v、w是G的顶点
  * 操作结果：在图G中删除弧<v,w>，如果图G是无向图，还需要删除<w,v>
  */
-status DeleteArc(ALGraph &G, VertexType v, VertexType w)
+status DeleteArc(ALGraph &G, Index v, Index w)
 {
+    ArcNode *arc;
 
+    // 没有邻接顶点，不需要删除
+    if (!G.vertices[v].firstarc) return ERROR;
+
+    if (G.vertices[v].firstarc->adjvex == w)
+    {
+        G.vertices[v].firstarc = G.vertices[v].firstarc->nextarc;
+    }
+    else if (G.vertices[v].firstarc->adjvex > w)
+    {
+        for (arc = G.vertices[v].firstarc; arc != NULL; arc = arc->nextarc)
+        {
+            if (arc->nextarc->adjvex == w)
+            {
+                arc->nextarc = arc->nextarc->nextarc;
+            }
+        }
+    }
+    return OK;
 }
 
 /*

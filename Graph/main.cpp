@@ -5,6 +5,213 @@
 #include <stdlib.h>
 #include <conio.h>
 
+int main(void){
+    ALGraph G;
+    VertexType V[MAX_VERTEX_NUM];
+    VertexType v, w;
+    int VR[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
+    int vexnum;
+    int op=1;
+    int i, j;
+    while (op)
+    {
+        system("cls");
+        printf("\n\n");
+        printf("      Menu for Graph On Adjacency List \n");
+        printf("-------------------------------------------------\n");
+        printf("    	  1. CreateGraph       7. NextAdjVex\n");
+        printf("    	  2. DestroyGraph      8. InsertVex\n");
+        printf("    	  3. LocateVex         9. DeleteVex \n");
+        printf("    	  4. GetVex            10. InsertArc\n");
+        printf("    	  5. PutVex            11. DeleteArc\n");
+        printf("    	  6. FirstAdjVex       12. DFSTraverse\n");
+        printf("    	  0. Exit\n");
+        printf("-------------------------------------------------\n");
+        printf("    请选择你的操作[0~12]:");
+        scanf("%d", &op);
+        switch (op)
+        {
+            case 1:
+                printf("请输入顶点数：");
+                scanf("%d", &vexnum);
+                printf("请依次输入顶点信息：\n");
+                for (i = 0; i < vexnum; i++)
+                {
+                    scanf("%d", &V[i]);
+                }
+                V[vexnum] = -1;
+                printf("请输入顶点关系信息：\n");
+                for (i = 0; i < vexnum; i++)
+                {
+                    for (j = 0; j < vexnum; j++)
+                    {
+                        scanf("%d", &VR[i][j]);
+                    }
+                }
+                if (CreateGraph(G, V, VR))
+                {
+                    printf("创建成功!\n");
+                }
+                // test
+                for (i = 0; i < vexnum; i++)
+                {
+
+                }
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 2:
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 3:
+                printf("请输出该顶点的值：");
+                scanf("%d", &v);
+                i = LocateVex(G, v);
+                if (i == -1)
+                {
+                    printf("不存在该顶点！\n");
+                }
+                else
+                {
+                    printf("该顶点的位置为%d！\n", i);
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 4:
+                printf("请输出该顶点的位置：");
+                scanf("%d", &v);
+                if (v < G.vexnum)
+                {
+                    i = GetVex(G, v);
+                    printf("该顶点的值为%d！\n", i);
+                }
+                else
+                {
+                    printf("输入不合法！\n");
+                }
+     
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 5:
+                scanf("%d", &i);
+                scanf("%d", &v);
+                if (i < G.vexnum)
+                {
+                    if (PutVex(G, i, v))
+                    {
+                        printf("赋值成功！\n");
+                    }
+                }
+                else
+                {
+                    printf("不存在该顶点！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 6:
+                printf("请输入顶点的值：");
+                scanf("%d", &i);
+                v = FirstAdjVex(G, i);
+                if (v)
+                {
+                    printf("该顶点第一个邻接顶点的值为%d！\n", v);
+                }
+                else
+                {
+                    printf("该顶点没有邻接顶点！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 7:
+                printf("请输入顶点的值：");
+                scanf("%d", &v);
+                printf("请输入邻接顶点的值：");
+                scanf("%d", &w);
+                i = NextAdjVex(G, v, w);
+                if (i)
+                {
+                    printf("该顶点下一个邻接顶点的值为%d！\n", i);
+                }
+                else
+                {
+                    printf("该邻接顶点是最后一个邻接顶点！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 8:
+                printf("请输入需要插入的顶点的值：");
+                scanf("%d", &v);
+                if (G.vexnum < MAX_VERTEX_NUM)
+                {
+                    if (InsertVex(G, v))
+                    {
+                        printf("顶点插入成功！\n");
+                    }
+                }
+                else
+                {
+                    printf("已达到最大顶点数！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 9:
+                printf("请输入需要删除的顶点的值：");
+                scanf("%d", &v);
+                if (DeleteVex(G, v))
+                {
+                    printf("顶点删除成功！\n");
+                }
+                else
+                {
+                    printf("顶点删除失败！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 10:
+                printf("请输入需要插入的弧对应的顶点位置：");
+                scanf("%d %d", &v, &w);
+                if (InsertArc(G, v, w))
+                {
+                    printf("弧插入成功！\n");
+                }
+                else
+                {
+                    printf("弧插入失败！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 11:
+                printf("请输入需要删除的弧对应的顶点位置：");
+                scanf("%d %d", &v, &w);
+                if (DeleteArc(G, v, w))
+                {
+                    printf("弧删除成功！\n");
+                }
+                else
+                {
+                    printf("弧删除失败！\n");
+                }
+
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 12:
+                printf("输入任意键继续。。。"); getch();
+                break;
+            case 0:
+                break;
+        } //end of switch
+    }     //end of while
+    printf("欢迎下次再使用本系统！\n");
+    return 0;
+}//end of main()
+
+
 /*
  * 初始条件：V是图的顶点集，VR是图的关系集
  * 操作结果：按V和VR的定义构造图G
@@ -14,6 +221,7 @@ status CreateGraph(ALGraph &G, VertexType V[MAX_VERTEX_NUM], int VR[MAX_VERTEX_N
     ArcNode *arctemp;
 
     G.kind = DG;    // 构造有向图
+    G.vexnum = 0;
     for (int i = 0; i < MAX_VERTEX_NUM; i++)
     {
         if (V[i] == -1) break;
@@ -30,9 +238,10 @@ status CreateGraph(ALGraph &G, VertexType V[MAX_VERTEX_NUM], int VR[MAX_VERTEX_N
             {
                 if (G.vertices[i].firstarc == NULL)     // 是第一条依附该顶点的弧
                 {
+                    // printf("done\n");
                     G.vertices[i].firstarc = (ArcNode *)malloc(sizeof(ArcNode));
                     G.vertices[i].firstarc->adjvex = j;
-                    G.vertices[i].firstarc->nextarc = G.vertices[i].firstarc;
+                    G.vertices[i].firstarc->nextarc = NULL;
                 }
                 else
                 {
@@ -94,7 +303,7 @@ int LocateVex(ALGraph G, VertexType u)
  * 初始条件：图G存在，v是G中的某个顶点
  * 操作结果：返回v的值
  */
-VertexType GetVex(ALGraph G, int v)
+VertexType GetVex(ALGraph G, Index v)
 {
     return G.vertices[v].data;
 }
@@ -153,10 +362,12 @@ VertexType NextAdjVex(ALGraph G, VertexType v, VertexType w)
             {
                 if (G.vertices[arc->adjvex].data == w)
                 {
+                    // printf("%d", G.vertices[arc->adjvex].data);
+                    // printf("%d", G.vertices[arc->nextarc->adjvex].data);
                     nextarc = arc->nextarc;
                     if (nextarc)
                     {
-                        return G.vertices[arc->nextarc->adjvex].data;
+                        return G.vertices[nextarc->adjvex].data;
                     }
                     else
                     {
@@ -191,7 +402,7 @@ status InsertVex(ALGraph &G, VertexType v)
  */
 status DeleteVex(ALGraph &G, VertexType v)
 {
-    Index index = 0;
+    Index index = -1;
     ArcNode *arc;
 
     // 获取顶点v的位置
@@ -203,6 +414,7 @@ status DeleteVex(ALGraph &G, VertexType v)
             break;
         }
     }
+    if (index == -1) return ERROR;
 
     // 删除顶点v
     for (int i = index; i < G.vexnum - 1; i++)
@@ -239,6 +451,14 @@ status DeleteVex(ALGraph &G, VertexType v)
 status InsertArc(ALGraph &G, Index v, Index w)
 {
     ArcNode *arc, *temp;
+    if (!G.vertices[v].firstarc)
+    {
+        temp = (ArcNode *)malloc(sizeof(ArcNode));
+        temp->adjvex = w;
+        temp->nextarc = NULL;
+        G.vertices[v].firstarc = temp;
+        return OK;
+    }
     for (arc = G.vertices[v].firstarc; arc != NULL; arc = arc->nextarc)
     {
         if (arc->adjvex > w)
@@ -251,6 +471,14 @@ status InsertArc(ALGraph &G, Index v, Index w)
                 arc->nextarc = temp;
                 return OK;
             }
+        }
+        if (arc->adjvex < w)
+        {
+            temp = (ArcNode *)malloc(sizeof(ArcNode));
+            temp->adjvex = w;
+            temp->nextarc = arc->nextarc;
+            arc->nextarc = temp;
+            return OK;
         }
     }
     return ERROR;
@@ -291,6 +519,7 @@ status DeleteArc(ALGraph &G, Index v, Index w)
 status DFSTraverse(ALGraph G, status (*Visit)(VertexType v))
 {
 
+    return OK;
 }
 
 /*
@@ -300,5 +529,17 @@ status DFSTraverse(ALGraph G, status (*Visit)(VertexType v))
 status BFSTraverse(ALGraph G, status (*Visit)(VertexType v))
 {
 
+    return OK;
 }
 
+status SaveData(ALGraph G)
+{
+
+    return OK;
+}
+
+status LoadData(ALGraph G)
+{
+
+    return OK;
+}

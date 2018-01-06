@@ -36,7 +36,7 @@ status CreateGraph(ALGraph &G, VertexType V[MAX_VERTEX_NUM], int VR[MAX_VERTEX_N
 status DestroyGraph(ALGraph G);
 int LocateVex(ALGraph G, VertexType u);
 VertexType GetVex(ALGraph G, int v);
-status PutVex(ALGraph &G, Index v, int value);
+status PutVex(ALGraph &G, Index v, VertexType value);
 VertexType FirstAdjVex(ALGraph G, VertexType v);
 VertexType NextAdjVex(ALGraph G, VertexType v, VertexType w);
 status InsertVex(ALGraph &G, VertexType v);
@@ -45,4 +45,5 @@ status InsertArc(ALGraph &G, Index v, Index w);
 status DeleteArc(ALGraph &G, Index v, Index w);
 status DFSTraverse(ALGraph G, status (*Visit)(VertexType v));
 status BFSTraverse(ALGraph G, status (*Visit)(VertexType v));
-
+status SaveData(ALGraph G);
+status LoadData(ALGraph &G);

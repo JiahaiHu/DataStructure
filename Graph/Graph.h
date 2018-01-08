@@ -32,8 +32,25 @@ typedef struct {
 } ALGraph;
 
 
+typedef Index QElemType;
+
+typedef struct QNode {
+    QElemType v;
+    struct QNode *next;
+} QNode, *QueuePtr;
+
+typedef struct {
+    QueuePtr front;     // 队头指针
+    QueuePtr rear;      // 队尾指针
+} LinkQueue;
+
+
+
+
+status InitGraphes(ALGraph *Graphes[5]);
+ALGraph * SelectGraph(ALGraph *Graphes[5]);
 status CreateGraph(ALGraph &G, VertexType V[MAX_VERTEX_NUM], int VR[MAX_VERTEX_NUM][MAX_VERTEX_NUM]);
-status DestroyGraph(ALGraph G);
+status DestroyGraph(ALGraph &G);
 int LocateVex(ALGraph G, VertexType u);
 VertexType GetVex(ALGraph G, int v);
 status PutVex(ALGraph &G, Index v, VertexType value);
@@ -43,7 +60,13 @@ status InsertVex(ALGraph &G, VertexType v);
 status DeleteVex(ALGraph &G, VertexType v);
 status InsertArc(ALGraph &G, Index v, Index w);
 status DeleteArc(ALGraph &G, Index v, Index w);
+status PrintElement(VertexType v);
 status DFSTraverse(ALGraph G, status (*Visit)(VertexType v));
 status BFSTraverse(ALGraph G, status (*Visit)(VertexType v));
-status SaveData(ALGraph G);
-status LoadData(ALGraph &G);
+status SaveData(ALGraph *Graphes[5]);
+status ReadData(ALGraph *Graphes[5]);
+
+status InitQueue(LinkQueue &Q);
+status QueueEmpty(LinkQueue &Q);
+status EnQueue(LinkQueue &Q, QElemType &e);
+status DeQueue(LinkQueue &Q, QElemType &e);

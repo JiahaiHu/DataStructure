@@ -202,7 +202,7 @@ int main()
                 S = SearchAVL(*p, id);
                 if (S)
                 {
-                   show_info(S); 
+                   show_info(S);
                 }
                 else
                 {
@@ -231,7 +231,7 @@ int main()
             case 16:    // indirect_friends
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 17:    // Save
+            case 19:    // Save
                 if (SaveData(U))
                 {
                     printf("数据保存成功！\n");
@@ -243,7 +243,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 18:    // Load
+            case 20:    // Load
                 if (ReadData(U))
                 {
                     printf("数据读取成功！\n");
@@ -277,7 +277,7 @@ User input_user()
 {
     int id_user, id_friend, id_fan, id_follow;
     User user, frd, fan, follow;
-    
+
     printf("请输入用户的id：");
     scanf("%d", &id_user);getchar();
     user.id = id_user;
@@ -355,7 +355,7 @@ void SelectSet(Set *&p)
         T = SelectUser(U);
         if (i == 1)
         {
-           p = &T->user.friends; 
+           p = &T->user.friends;
         }
         else if (i == 2)
         {
@@ -470,7 +470,6 @@ status InsertAVL(AVLTree &T, User user, bool &taller)
             }
         }
     }
-    TraverseAVL(T);
     return OK;
 }
 
@@ -534,7 +533,7 @@ void RightBalance(AVLTree &T)
 {
     AVLTree rchild = NULL;
     AVLTree rlchild = NULL;
-    
+
     rchild = T->rchild;
     switch (rchild->bf)
     {
@@ -663,18 +662,19 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
 status TraverseAVL(AVLTree T)
 {
     PreOrderTraverse(T);
+    printf("\n");
     return OK;
 }
 
-void PreOrderTraverse(AVLTree T)  
-{  
-    if (!T)  
-    {  
-          printf("%d ", T->user.id);  
-          PreOrderTraverse(T->lchild);  
-          PreOrderTraverse(T->rchild);  
-     }  
-}  
+void PreOrderTraverse(AVLTree T)
+{
+    if (T)
+    {
+          printf("%d ", T->user.id);
+          PreOrderTraverse(T->lchild);
+          PreOrderTraverse(T->rchild);
+     }
+}
 
 status set_init(Set &S)
 {
@@ -774,7 +774,7 @@ bool set_equal(Set S, Set T)
 status SaveData(Set U)
 {
     int num;
-    
+
     if ((fp = fopen(filename, "wb")) == NULL)
 	{
 		printf("文件打开失败！\n");
@@ -783,7 +783,7 @@ status SaveData(Set U)
     num = set_size(U);
     fwrite(&num, sizeof(int), 1, fp);   // num_users
     SaveUsers(U);
-    
+
     fclose(fp);
     return OK;
 }
@@ -807,7 +807,7 @@ status ReadData(Set &U)
 
         fread(&num_friends, sizeof(int), 1, fp);    // num_friends
         set_init(user.friends);
-        for (int j = 0; j < num_friends; i++)
+        for (int j = 0; j < num_friends; j++)
         {
             fread(&id_friend, sizeof(int), 1, fp);  // id_friend
             frd.id = id_friend;
@@ -817,7 +817,7 @@ status ReadData(Set &U)
 
         fread(&num_fans, sizeof(int), 1, fp);    // num_fans
         set_init(user.fans);
-        for (int j = 0; j < num_fans; i++)
+        for (int j = 0; j < num_fans; j++)
         {
             fread(&id_fan, sizeof(int), 1, fp);  // id_fan
             fan.id = id_fan;
@@ -827,7 +827,7 @@ status ReadData(Set &U)
 
         fread(&num_follows, sizeof(int), 1, fp);    // num_follows
         set_init(user.follows);
-        for (int j = 0; j < num_follows; i++)
+        for (int j = 0; j < num_follows; j++)
         {
             fread(&id_follow, sizeof(int), 1, fp);  // id_follow
             follow.id = id_follow;
@@ -844,7 +844,7 @@ status ReadData(Set &U)
 
 void SaveUsers(Set U)
 {
-    if (!U)
+    if (U)
     {
         SaveUser(U);
         SaveUsers(U->lchild);
@@ -856,27 +856,27 @@ void SaveUser(Set T)
 {
     int num;
 
-    fwrite(&T->user.id, sizeof(int), 1, fp);    // id_user
+    fwrite(&(T->user.id), sizeof(int), 1, fp);    // id_user
 
     num = set_size(T->user.friends);
     fwrite(&num, sizeof(int), 1, fp);   // num_friends
-    SaveFriendsId(T->user.friends);     // id_friend
-    
+    SaveUserId(T->user.friends);        // id_friend
+
     num = set_size(T->user.fans);
     fwrite(&num, sizeof(int), 1, fp);   // num_fans
-    SaveFansId(T->user.fans);           // id_fan
-    
+    SaveUserId(T->user.fans);           // id_fan
+
     num = set_size(T->user.follows);
     fwrite(&num, sizeof(int), 1, fp);   // num_follows
-    SaveFollowsId(T->user.follows);     // id_follow
+    SaveUserId(T->user.follows);        // id_follow
 }
 
 
 void SaveUserId(Set T)
 {
-    if (!T)
+    if (T)
     {
-        fwrite(&T->user.id, sizeof(int), 1, fp);
+        fwrite(&(T->user.id), sizeof(int), 1, fp);
         SaveUserId(T->lchild);
         SaveUserId(T->rchild);
     }
@@ -884,7 +884,7 @@ void SaveUserId(Set T)
 
 void SaveFriendsId(Set T)
 {
-    if (!T)
+    if (T)
     {
         SaveUserId(T->user.friends);
         SaveFriendsId(T->lchild);
@@ -894,7 +894,7 @@ void SaveFriendsId(Set T)
 
 void SaveFansId(Set T)
 {
-    if (!T)
+    if (T)
     {
         SaveUserId(T->user.fans);
         SaveFansId(T->lchild);
@@ -904,7 +904,7 @@ void SaveFansId(Set T)
 
 void SaveFollowsId(Set T)
 {
-    if (!T)
+    if (T)
     {
         SaveUserId(T->user.follows);
         SaveFansId(T->lchild);

@@ -10,12 +10,14 @@ FILE *fp;
 bool taller, shorter;
 char filename[30] = "D:/SetData.txt";
 
+Set U = NULL;   // users set
+Set S = NULL;
+Set T1 = NULL;   // test set
+Set T2 = NULL;   // test set
+
 int main()
 {
-    Set U = NULL;   // users set
-    AVLTree T = NULL;
-    Set S1 = NULL;
-    Set S2 = NULL;
+    Set *p = NULL;   // pointer
     int op = 1;
 	int id;
 
@@ -25,31 +27,39 @@ int main()
 		printf("\n\n");
 		printf("      Menu for Set ADT On AVL Tree Structure \n");
 		printf("-------------------------------------------------\n");
-		printf("    	  1. set_init           7. set_difference\n");
-		printf("    	  2. set_destroy        8. set_member\n");
-		printf("    	  3. set_insert         9. set_subset \n");
-		printf("    	  4. set_remove         10. set_equal\n");
-		printf("    	  5. set_intersection   11. set_\n");
-		printf("    	  6. set_union          12. indirect_friends\n");
-		printf("    	  13. SaveData          14. ReadData\n");
+		printf("    	  1. set_init           9. set_subset\n");
+		printf("    	  2. set_destroy        10. set_equal\n");
+		printf("    	  3. set_insert         11. member_add\n");
+		printf("    	  4. set_remove         12. member_delete\n");
+		printf("    	  5. set_intersection   13. member_search\n");
+		printf("    	  6. set_union          14. member_modify\n");
+		printf("    	  7. set_difference     15. TraverseAVL\n");
+		printf("    	  8. set_member         16. indirect_friends\n");
+		printf("    	  17. commom_hobby      18. common_follow\n");
+		printf("    	  19. SaveData          20. ReadData\n");
 		printf("    	  0. Exit\n");
 		printf("-------------------------------------------------\n");
 		printf("    请选择你的操作[0~14]:");
 		scanf("%d", &op);
 		switch (op)
 		{
-            case 1:
-                set_init(T);
+            case 1:     // init
+                set_init(T1);
+                printf("初始化成功！\n");
+
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 2:
-                set_destroy(T);
+            case 2:     // destroy
+                set_destroy(T1);
                 printf("销毁成功！\n");
+
+                printf("输入任意键继续。。。");getch();
                 break;
-            case 3:
+            case 3:     // insert
                 User user;
-                // todo: input user info
-                if (set_insert(T, user, taller))
+                Select1or2(p);
+                user = input_user();
+                if (set_insert(*p, user, taller))
                 {
                     printf("插入成功！\n");
                 }
@@ -57,11 +67,14 @@ int main()
                 {
                     printf("插入失败！\n");
                 }
+
+                printf("输入任意键继续。。。");getch();
                 break;
-            case 4:
+            case 4:     // remove
+                Select1or2(p);
                 printf("请输入被删除人的id：");
                 scanf("%d", &id);getchar();
-                if (set_remove(T, id, shorter))
+                if (set_remove(*p, id, shorter))
                 {
                     printf("删除成功！\n");
                 }
@@ -69,13 +82,56 @@ int main()
                 {
                     printf("删除失败！\n");
                 }
+
+                printf("输入任意键继续。。。");getch();
                 break;
-            case 5:
+            case 5:     // intersection
+                if (set_intersection(T1, T2, S))
+                {
+                    printf("交集操作成功！\n");
+                    printf("两个集合的交集为：\n");
+                    TraverseAVL(S);
+                }
+                else
+                {
+                    printf("交集操作失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
                 break;
-            case 8:
+            case 6:     // union
+                if (set_union(T1, T2))
+                {
+                    printf("并集操作成功！\n");
+                    printf("两个集合的并集为：\n");
+                    TraverseAVL(T1);
+                }
+                else
+                {
+                    printf("并集操作失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 7:     // difference
+                if (set_diffrence(T1, T2))
+                {
+                    printf("差集操作成功！\n");
+                    printf("两个集合的差集为：\n");
+                    TraverseAVL(T1);
+                }
+                else
+                {
+                    printf("差集操作失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 8:     // member
+                Select1or2(p);
                 printf("请输入id：");
                 scanf("%d", &id);getchar();
-                if (set_member(T, id))
+                if (set_member(*p, id))
                 {
                     printf("集合中有此人！\n");
                 }
@@ -83,8 +139,121 @@ int main()
                 {
                     printf("集合中没有此人！\n");
                 }
+
+                printf("输入任意键继续。。。");getch();
                 break;
-            case 9:
+            case 9:     // subset
+                if (set_subset(T1, T2))
+                {
+                    printf("是子集！\n");
+                }
+                else
+                {
+                    printf("不是子集！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 10:    // equal
+                if (set_equal(T1, T2))
+                {
+                    printf("两个集合相同！\n");
+                }
+                else
+                {
+                    printf("两个集合不同！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 11:    // member_add
+                SelectSet(p);
+                user = input_user();
+                if (set_insert(*p, user, taller))
+                {
+                    printf("成员添加成功！\n");
+                }
+                else
+                {
+                    printf("成员添加失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 12:    // member_delete
+                SelectSet(p);
+                printf("请输入被删除人的id：");
+                scanf("%d", &id);getchar();
+                if (set_remove(*p, id, shorter))
+                {
+                    printf("成员删除成功！\n");
+                }
+                else
+                {
+                    printf("成员删除失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 13:    // member_search
+                SelectSet(p);
+                printf("请输入需要查找的用户的id：");
+                scanf("%d", &id);getchar();
+                S = SearchAVL(*p, id);
+                if (S)
+                {
+                   show_info(S); 
+                }
+                else
+                {
+                    printf("搜索不到该成员！\n");
+                }
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 14:    // member_modify
+                SelectSet(p);
+                printf("请输入需要修改的用户的id：");
+                scanf("%d", &id);getchar();
+                S = SearchAVL(*p, id);
+                user = S->user;
+                // todo: modify info
+                // user.hobby = ..
+                S->user = user;
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 15:    // Traverse
+                S = SelectUser(U);
+                show_info(S);
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 16:    // indirect_friends
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 17:    // Save
+                if (SaveData(U))
+                {
+                    printf("数据保存成功！\n");
+                }
+                else
+                {
+                    printf("数据保存失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 18:    // Load
+                if (ReadData(U))
+                {
+                    printf("数据读取成功！\n");
+                }
+                else
+                {
+                    printf("数据读取失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
                 break;
 		    case 0:
                 break;
@@ -94,9 +263,117 @@ int main()
     return 0;
 }
 
+void show_info(AVLNode *T)
+{
+    printf("该用户的朋友有：\n");
+    TraverseAVL(T->user.friends);
+    printf("该用户的粉丝有：\n");
+    TraverseAVL(T->user.fans);
+    printf("该用户关注的人有：\n");
+    TraverseAVL(T->user.follows);
+}
+
+User input_user()
+{
+    int id_user, id_friend, id_fan, id_follow;
+    User user, frd, fan, follow;
+    
+    printf("请输入用户的id：");
+    scanf("%d", &id_user);getchar();
+    user.id = id_user;
+    set_init(user.friends);
+    set_init(user.fans);
+    set_init(user.follows);
+    printf("请输入朋友的id：");
+    while (1)
+    {
+        scanf("%d", &id_friend);getchar();
+        if (id_friend > 0)
+        {
+            frd.id = id_friend;
+            set_insert(user.friends, frd, taller);
+        }
+        else break;
+    }
+    printf("请输入粉丝的id：");
+    while (1)
+    {
+        scanf("%d", &id_fan);getchar();
+        if (id_fan > 0)
+        {
+            fan.id = id_fan;
+            set_insert(user.fans, fan, taller);
+        }
+        else break;
+    }
+    printf("请输入关注的人的id：");
+    while (1)
+    {
+        scanf("%d", &id_follow);getchar();
+        if (id_follow > 0)
+        {
+            follow.id = id_follow;
+            set_insert(user.follows, follow, taller);
+        }
+        else break;
+    }
+    return user;
+}
+
+void Select1or2(Set *&p)
+{
+    int i;
+    printf("请选择集合(1 or 2)：");
+    scanf("%d", &i);getchar();
+    if (i == 1)
+    {
+        p = &T1;
+    }
+    else if (i == 2)
+    {
+        p = &T2;
+    }
+}
+
+void SelectSet(Set *&p)
+{
+    int i;
+    AVLNode *T;
+
+    printf("你想对哪个集合进行操作：\n");
+    printf("1. friends\n");
+    printf("2. fans\n");
+    printf("3. follows\n");
+    printf("4. users\n");
+    scanf("%d", &i);
+    if (i == 4)
+    {
+        p = &U;
+    }
+    else
+    {
+        T = SelectUser(U);
+        if (i == 1)
+        {
+           p = &T->user.friends; 
+        }
+        else if (i == 2)
+        {
+            p = &T->user.fans;
+        }
+        else if (i == 3)
+        {
+            p = &T->user.follows;
+        }
+    }
+}
+
 AVLNode *SelectUser(Set U)
 {
-
+    int id;
+    printf("请输入要选择的用户的id：");
+    scanf("%d", &id);getchar();
+    return SearchAVL(U, id);
 }
 
 status InitAVL(AVLTree &T)
@@ -193,6 +470,7 @@ status InsertAVL(AVLTree &T, User user, bool &taller)
             }
         }
     }
+    TraverseAVL(T);
     return OK;
 }
 
@@ -222,6 +500,11 @@ void LeftBalance(AVLTree &T)
     {
         case LH:
             T->bf = lchild->bf = EH;
+            R_Rotate(T);
+            break;
+        case EH:
+            T->bf = LH;
+            lchild->bf = RH;
             R_Rotate(T);
             break;
         case RH:
@@ -387,7 +670,7 @@ void PreOrderTraverse(AVLTree T)
 {  
     if (!T)  
     {  
-          printf("%d\t",T->user.id);  
+          printf("%d ", T->user.id);  
           PreOrderTraverse(T->lchild);  
           PreOrderTraverse(T->rchild);  
      }  
@@ -445,7 +728,13 @@ status set_diffrence(Set &S, Set T)
 
 int set_size(Set S)
 {
-    // todo
+    int num = 0;
+    if (!S) return 0;
+    else
+    {
+        num = 1 + set_size(S->lchild) + set_size(S->rchild);
+    }
+    return num;
 }
 
 bool set_member(Set S, int id)
@@ -622,4 +911,3 @@ void SaveFollowsId(Set T)
         SaveFansId(T->rchild);
     }
 }
-

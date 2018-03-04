@@ -24,3 +24,43 @@ typedef struct AVLNode {
 
 typedef AVLTree Set;
 
+void show_info(AVLNode *T);
+User input_user();
+void Select1or2(Set *&p);
+void SelectSet(Set *&p);
+AVLNode *SelectUser(Set U);
+
+status InitAVL(AVLTree &T);
+status DestroyAVL(AVLTree T);
+AVLNode *SearchAVL(AVLTree T, int id);
+status InsertAVL(AVLTree &T, User user, bool &taller);
+status DeleteAVL(AVLTree &T, int id, bool &shorter);
+status TraverseAVL(AVLTree T);
+void PreOrderTraverse(AVLTree T);
+
+void R_Rotate(AVLTree &T);
+void L_Rotate(AVLTree &T);
+void LeftBalance(AVLTree &T);
+void RightBalance(AVLTree &T);
+
+status set_init(Set &S);
+status set_destroy(Set &S);
+status set_insert(Set &S, User user, bool &taller);
+status set_remove(Set &S, int id, bool &shorter);
+status set_intersection(Set S, Set T, Set &D);
+status set_union(Set &S, Set T);
+status set_diffrence(Set &S, Set T);
+int set_size(Set S);
+bool set_member(Set S, int id);
+bool set_subset(Set S, Set T);
+bool set_equal(Set S, Set T);
+
+status SaveData(Set U);
+status ReadData(Set &U);
+
+void SaveUsers(Set U);
+void SaveUser(Set T);
+void SaveUserId(Set T);
+void SaveFriendsId(Set T);
+void SaveFansId(Set T);
+void SaveFollowsId(Set T);

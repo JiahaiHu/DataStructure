@@ -61,6 +61,7 @@ status ReadData(Set &U);
 void SaveUsers(Set U);
 void SaveUser(Set T);
 void SaveUserId(Set T);
-void SaveFriendsId(Set T);
-void SaveFansId(Set T);
-void SaveFollowsId(Set T);
+
+User create_user(int id);
+void TraverseFriends(Set S, Set &F);
+void TraverseIndirectFriends(Set S, Set &F);

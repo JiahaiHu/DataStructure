@@ -5,6 +5,8 @@
 #include <conio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
+#include <Windows.h>
 
 FILE *fp;
 bool taller, shorter;
@@ -37,7 +39,7 @@ int main()
 		printf("    	  8. set_member         16. indirect_friends\n");
 		printf("    	  17. commom_hobby      18. common_follow\n");
 		printf("    	  19. SaveData          20. ReadData\n");
-		printf("    	  0. Exit\n");
+		printf("    	  21. CreateRandomData  0. Exit\n");
 		printf("-------------------------------------------------\n");
 		printf("    请选择你的操作[0~14]:");
 		scanf("%d", &op);
@@ -202,7 +204,8 @@ int main()
                 S = SearchAVL(*p, id);
                 if (S)
                 {
-                   show_info(S);
+                    printf("该用户在此集合中！\n");
+                    show_info(SearchAVL(U, id));
                 }
                 else
                 {
@@ -215,20 +218,43 @@ int main()
                 printf("请输入需要修改的用户的id：");
                 scanf("%d", &id);getchar();
                 S = SearchAVL(*p, id);
-                user = S->user;
-                // todo: modify info
-                // user.hobby = ..
-                S->user = user;
+                if (S)
+                {
+                    user = S->user;
+                    // todo: modify info
+                    // user.hobby = ..
+                    S->user = user;
+                }
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 15:    // Traverse
                 S = SelectUser(U);
-                show_info(S);
+                if (S)
+                {
+                    show_info(S);
+                }
+                else
+                {
+                    printf("该用户不存在！\n");
+                }
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 16:    // indirect_friends
+                S = SelectUser(U);
+                if (S)
+                {
+                    TraverseFriends(S->user.friends, T1);
+                    set_remove(T1, S->user.id, shorter);
+                    printf("该用户的二度好友有：\n");
+                    TraverseAVL(T1);
+                }
+                else
+                {
+                    printf("该用户不存在！\n");
+                }
+
                 printf("输入任意键继续。。。");getch();
                 break;
             case 19:    // Save
@@ -255,12 +281,64 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
+            case 21:    // create random data
+                for (int id = 1; id < 31; id++)
+                {
+                    Sleep(1000);
+                    set_insert(U, create_user(id), taller);
+                }
+                printf("随机生成数据成功！\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
 		    case 0:
                 break;
         }
     }
     printf("欢迎下次再使用本系统！\n");
     return 0;
+}
+
+User create_user(int id)
+{
+    User user, frd, fan, follow;
+    int num_fans, num_friends, num_follows;
+
+    user.id = id;
+    set_init(user.fans);
+    set_init(user.friends);
+    set_init(user.follows);
+
+    srand((unsigned) time(NULL));
+    num_fans = 1 + rand() % 10;
+    for (int i = 0; i < num_fans; i++)
+    {
+        fan.id = 1 + rand() % 30;
+        set_insert(user.fans, fan, taller);
+    }
+    set_remove(user.fans, id, shorter);
+    Sleep(1000);
+
+    srand((unsigned) time(NULL));
+    num_friends = 1 + rand() % 10;
+    for (int i = 0; i < num_friends; i++)
+    {
+        frd.id = 1 + rand() % 30;
+        set_insert(user.friends, frd, taller);
+    }
+    set_remove(user.friends, id, shorter);
+    Sleep(1000);
+
+    srand((unsigned) time(NULL));
+    num_follows = 1 + rand() % 10;
+    for (int i = 0; i < num_follows; i++)
+    {
+        follow.id = 1 + rand() % 30;
+        set_insert(user.follows, follow, taller);
+    }
+    set_remove(user.follows, id, shorter);
+
+    return user;
 }
 
 void show_info(AVLNode *T)
@@ -425,7 +503,7 @@ status InsertAVL(AVLTree &T, User user, bool &taller)
             taller = FALSE;
             return ERROR;
         }
-        if (user.id == T->user.id)
+        if (user.id < T->user.id)
         {
             if (!InsertAVL(T->lchild, user, taller)) return ERROR;
             if (taller)
@@ -842,6 +920,28 @@ status ReadData(Set &U)
     return OK;
 }
 
+void TraverseFriends(Set S, Set &F)
+{
+    Set T;
+    if (S)
+    {
+        T = SearchAVL(U, S->user.id);
+        TraverseIndirectFriends(T->user.friends, F);
+        TraverseFriends(S->lchild, F);
+        TraverseFriends(S->rchild, F);
+    }
+}
+
+void TraverseIndirectFriends(Set S, Set &F)
+{
+    if (S)
+    {
+        set_insert(F, S->user, taller);
+        TraverseIndirectFriends(S->lchild, F);
+        TraverseIndirectFriends(S->rchild, F);
+    }
+}
+
 void SaveUsers(Set U)
 {
     if (U)
@@ -879,35 +979,5 @@ void SaveUserId(Set T)
         fwrite(&(T->user.id), sizeof(int), 1, fp);
         SaveUserId(T->lchild);
         SaveUserId(T->rchild);
-    }
-}
-
-void SaveFriendsId(Set T)
-{
-    if (T)
-    {
-        SaveUserId(T->user.friends);
-        SaveFriendsId(T->lchild);
-        SaveFriendsId(T->rchild);
-    }
-}
-
-void SaveFansId(Set T)
-{
-    if (T)
-    {
-        SaveUserId(T->user.fans);
-        SaveFansId(T->lchild);
-        SaveFansId(T->rchild);
-    }
-}
-
-void SaveFollowsId(Set T)
-{
-    if (T)
-    {
-        SaveUserId(T->user.follows);
-        SaveFansId(T->lchild);
-        SaveFansId(T->rchild);
     }
 }

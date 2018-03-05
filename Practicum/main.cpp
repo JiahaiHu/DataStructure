@@ -739,7 +739,7 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
 
 status TraverseAVL(AVLTree T)
 {
-    PreOrderTraverse(T);
+    InOrderTraverse(T);
     printf("\n");
     return OK;
 }
@@ -748,10 +748,20 @@ void PreOrderTraverse(AVLTree T)
 {
     if (T)
     {
-          printf("%d ", T->user.id);
-          PreOrderTraverse(T->lchild);
-          PreOrderTraverse(T->rchild);
+        printf("%d ", T->user.id);
+        PreOrderTraverse(T->lchild);
+        PreOrderTraverse(T->rchild);
      }
+}
+
+void InOrderTraverse(AVLTree T)
+{
+    if (T)
+    {
+        InOrderTraverse(T->lchild);
+        printf("%d ", T->user.id);
+        InOrderTraverse(T->rchild);
+    }
 }
 
 status set_init(Set &S)

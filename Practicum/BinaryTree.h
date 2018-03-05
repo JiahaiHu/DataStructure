@@ -37,6 +37,7 @@ status InsertAVL(AVLTree &T, User user, bool &taller);
 status DeleteAVL(AVLTree &T, int id, bool &shorter);
 status TraverseAVL(AVLTree T);
 void PreOrderTraverse(AVLTree T);
+void InOrderTraverse(AVLTree T);
 
 void R_Rotate(AVLTree &T);
 void L_Rotate(AVLTree &T);

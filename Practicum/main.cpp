@@ -216,15 +216,25 @@ int main()
                 break;
             case 14:    // member_modify
                 SelectSet(p);
-                printf("请输入需要修改的用户的id：");
+                printf("请输入需要修改的信息的id：");
                 scanf("%d", &id);getchar();
                 S = SearchAVL(*p, id);
                 if (S)
                 {
-                    user = S->user;
-                    // todo: modify info
-                    // user.hobby = ..
-                    S->user = user;
+                    printf("请输入修改后的新id：");
+                    scanf("%d", &user.id);getchar();
+                    if (set_remove(*p, id, taller) && set_insert(*p, user, taller))
+                    {
+                        printf("修改成功！\n");
+                    }
+                    else
+                    {
+                        printf("修改失败！\n");
+                    }
+                }
+                else
+                {
+                    printf("该用户不存在！\n");
                 }
 
                 printf("输入任意键继续。。。");getch();
@@ -262,8 +272,12 @@ int main()
             case 17:    // common_hobby
                 set_init(T1);
                 set_init(T2);
+                set_init(S);
                 T1 = SelectUser(U);
                 T2 = SelectUser(U);
+                set_intersection(T1->user.hobbys, T2->user.hobbys, S);
+                printf("两个用户共同的爱好有：\n");
+                TraverseAVL(S);
 
                 printf("输入任意键继续。。。");getch();
                 break;
@@ -325,11 +339,14 @@ User create_user(int id)
 {
     User user, frd, fan, follow;
     int num_fans, num_friends, num_follows;
+    User hobby;
+    int num_hobbys;
 
     user.id = id;
     set_init(user.fans);
     set_init(user.friends);
     set_init(user.follows);
+    set_init(user.hobbys);
 
     srand((unsigned) time(NULL));
     num_fans = 1 + rand() % 10;
@@ -339,8 +356,8 @@ User create_user(int id)
         set_insert(user.fans, fan, taller);
     }
     set_remove(user.fans, id, shorter);
-    Sleep(1000);
 
+    Sleep(1000);
     srand((unsigned) time(NULL));
     num_friends = 1 + rand() % 10;
     for (int i = 0; i < num_friends; i++)
@@ -349,8 +366,8 @@ User create_user(int id)
         set_insert(user.friends, frd, taller);
     }
     set_remove(user.friends, id, shorter);
-    Sleep(1000);
 
+    Sleep(1000);
     srand((unsigned) time(NULL));
     num_follows = 1 + rand() % 10;
     for (int i = 0; i < num_follows; i++)
@@ -359,6 +376,15 @@ User create_user(int id)
         set_insert(user.follows, follow, taller);
     }
     set_remove(user.follows, id, shorter);
+
+    Sleep(1000);
+    srand((unsigned) time(NULL));
+    num_hobbys = 1 + rand() % 10;
+    for (int i = 0; i < num_hobbys; i++)
+    {
+        hobby.id = 1 + rand() % 10;
+        set_insert(user.hobbys, hobby, taller);
+    }
 
     return user;
 }
@@ -371,12 +397,16 @@ void show_info(AVLNode *T)
     TraverseAVL(T->user.fans);
     printf("该用户关注的人有：\n");
     TraverseAVL(T->user.follows);
+    printf("该用户的爱好有：\n");
+    TraverseAVL(T->user.hobbys);
 }
 
 User input_user()
 {
     int id_user, id_friend, id_fan, id_follow;
     User user, frd, fan, follow;
+    int id_hobby;
+    User hobby;
 
     printf("请输入用户的id：");
     scanf("%d", &id_user);getchar();
@@ -417,6 +447,18 @@ User input_user()
         }
         else break;
     }
+    printf("请输入爱好的id：");
+    while (1)
+    {
+        scanf("%d", &id_hobby);getchar();
+        if (id_hobby > 0)
+        {
+            hobby.id = id_hobby;
+            set_insert(user.hobbys, hobby, taller);
+        }
+        else break;
+    }
+
     return user;
 }
 
@@ -444,9 +486,10 @@ void SelectSet(Set *&p)
     printf("1. friends\n");
     printf("2. fans\n");
     printf("3. follows\n");
-    printf("4. users\n");
+    printf("4. hobbys\n");
+    printf("5. users\n");
     scanf("%d", &i);
-    if (i == 4)
+    if (i == 5)
     {
         p = &U;
     }
@@ -464,6 +507,10 @@ void SelectSet(Set *&p)
         else if (i == 3)
         {
             p = &T->user.follows;
+        }
+        else if (i == 4)
+        {
+            p = &T->user.hobbys;
         }
     }
 }
@@ -903,6 +950,9 @@ status ReadData(Set &U)
     int num_users, num_friends, num_fans, num_follows;
     int id_user, id_friend, id_fan, id_follow;
     User user, frd, fan, follow;
+    int num_hobbys;
+    int id_hobby;
+    User hobby;
 
     if ((fp = fopen(filename, "rb")) == NULL)
 	{
@@ -943,6 +993,16 @@ status ReadData(Set &U)
             follow.id = id_follow;
             follow.fans = follow.follows = follow.friends = NULL;
             set_insert(user.follows, follow, taller);
+        }
+
+        fread(&num_hobbys, sizeof(int), 1, fp);    // num_hobbys
+        set_init(user.hobbys);
+        for (int j = 0; j < num_hobbys; j++)
+        {
+            fread(&id_hobby, sizeof(int), 1, fp);  // id_hobby
+            hobby.id = id_hobby;
+            hobby.fans = hobby.follows = hobby.friends = NULL;
+            set_insert(user.hobbys, hobby, taller);
         }
 
         set_insert(U, user, taller);
@@ -1001,6 +1061,10 @@ void SaveUser(Set T)
     num = set_size(T->user.follows);
     fwrite(&num, sizeof(int), 1, fp);   // num_follows
     SaveUserId(T->user.follows);        // id_follow
+    
+    num = set_size(T->user.hobbys);
+    fwrite(&num, sizeof(int), 1, fp);   // num_hobby
+    SaveUserId(T->user.hobbys);         // id_hobby
 }
 
 

@@ -12,8 +12,9 @@
 typedef int status;
 
 typedef struct User {
-    int id;
+    int id;     // id_user or id_hobby
     struct AVLNode *friends, *fans, *follows;// sets
+    struct AVLNode *hobbys;
 } User;
 
 typedef struct AVLNode {

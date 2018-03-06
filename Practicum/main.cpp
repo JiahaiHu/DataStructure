@@ -35,13 +35,14 @@ int main()
 		printf("    	  4. set_remove         12. member_delete\n");
 		printf("    	  5. set_intersection   13. member_search\n");
 		printf("    	  6. set_union          14. member_modify\n");
-		printf("    	  7. set_difference     15. TraverseAVL\n");
+		printf("    	  7. set_difference     15. show_info\n");
 		printf("    	  8. set_member         16. indirect_friends\n");
 		printf("    	  17. commom_hobby      18. common_follow\n");
 		printf("    	  19. SaveData          20. ReadData\n");
-		printf("    	  21. CreateRandomData  0. Exit\n");
+		printf("    	  21. CreateRandomData  22. Traverse\n");
+		printf("    	  23. set_traverse      0. Exit\n");
 		printf("-------------------------------------------------\n");
-		printf("    请选择你的操作[0~14]:");
+		printf("    请选择你的操作[0~23]:");
 		scanf("%d", &op);
 		switch (op)
 		{
@@ -60,7 +61,8 @@ int main()
             case 3:     // insert
                 User user;
                 Select1or2(p);
-                user = input_user();
+                printf("请输入用户的id：");
+                scanf("%d", &user.id);getchar();
                 if (set_insert(*p, user, taller))
                 {
                     printf("插入成功！\n");
@@ -327,6 +329,28 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
+            case 22:    // Traverse
+                SelectSet(p);
+                printf("该集合的前序遍历序列为：\n");
+                PreOrderTraverse(*p);
+                printf("\n");
+                printf("该集合的中序遍历序列为：\n");
+                InOrderTraverse(*p);
+                printf("\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 23:    // set_traverse
+                Select1or2(p);
+                printf("该集合的前序遍历序列为：\n");
+                PreOrderTraverse(*p);
+                printf("\n");
+                printf("该集合的中序遍历序列为：\n");
+                InOrderTraverse(*p);
+                printf("\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
 		    case 0:
                 break;
         }
@@ -414,6 +438,7 @@ User input_user()
     set_init(user.friends);
     set_init(user.fans);
     set_init(user.follows);
+    set_init(user.hobbys);
     printf("请输入朋友的id：");
     while (1)
     {
@@ -1061,7 +1086,7 @@ void SaveUser(Set T)
     num = set_size(T->user.follows);
     fwrite(&num, sizeof(int), 1, fp);   // num_follows
     SaveUserId(T->user.follows);        // id_follow
-    
+
     num = set_size(T->user.hobbys);
     fwrite(&num, sizeof(int), 1, fp);   // num_hobby
     SaveUserId(T->user.hobbys);         // id_hobby

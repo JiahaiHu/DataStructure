@@ -88,6 +88,7 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 5:     // intersection
+                set_init(S);
                 if (set_intersection(T1, T2, S))
                 {
                     printf("交集操作成功！\n");
@@ -242,6 +243,7 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 16:    // indirect_friends
+                set_init(T1);
                 S = SelectUser(U);
                 if (S)
                 {
@@ -254,6 +256,26 @@ int main()
                 {
                     printf("该用户不存在！\n");
                 }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 17:    // common_hobby
+                set_init(T1);
+                set_init(T2);
+                T1 = SelectUser(U);
+                T2 = SelectUser(U);
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 18:    // common_follow
+                set_init(T1);
+                set_init(T2);
+                set_init(S);
+                T1 = SelectUser(U);
+                T2 = SelectUser(U);
+                set_intersection(T1->user.follows, T2->user.follows, S);
+                printf("两个用户共同关注的人有：\n");
+                TraverseAVL(S);
 
                 printf("输入任意键继续。。。");getch();
                 break;

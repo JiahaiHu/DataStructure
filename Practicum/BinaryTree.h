@@ -74,3 +74,8 @@ void SaveHobby(Set T);
 User create_user(int id);
 void TraverseFriends(Set S, Set &F);
 void TraverseIndirectFriends(Set S, Set &F);
+
+void complete(AVLNode *T);
+void complete_friend(AVLNode *T, int id);
+void complete_fan(AVLNode *T, int id);
+void complete_follow(AVLNode *T, int id);

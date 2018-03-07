@@ -59,7 +59,8 @@ int main()
 		printf("    	  12. set_union         27. CreateRandomData\n");
 		printf("    	  13. set_difference    28. SaveData\n");
 		printf("    	  14. set_member        29. ReadData\n");
-		printf("    	  15. set_subset        0. Exit\n");
+		printf("    	  15. set_subset        30. Complete\n");
+		printf("    	  0. Exit\n");
 		printf("-------------------------------------------------\n");
 		printf("    请选择你的操作[0~29]:");
 		scanf("%d", &op);
@@ -266,6 +267,7 @@ int main()
                 user = input_user();
                 if (set_insert(*p, user, taller))
                 {
+                    complete(U);
                     printf("成员添加成功！\n");
                 }
                 else
@@ -431,6 +433,12 @@ int main()
                 printf("该集合的中序遍历序列为：\n");
                 InOrder(*p);
                 printf("\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 30:    // complete
+                complete(U);
+                printf("关系补全完成！\n");
 
                 printf("输入任意键继续。。。");getch();
                 break;
@@ -1264,5 +1272,60 @@ void SaveHobby(Set T)
         fwrite(T->user.name, sizeof(char), 7, fp);
         SaveHobby(T->lchild);
         SaveHobby(T->rchild);
+    }
+}
+
+void complete(AVLNode *T)
+{
+    if (T)
+    {
+        complete_friend(T->user.friends, T->user.id);
+        complete_fan(T->user.follows, T->user.id);
+        complete_follow(T->user.fans, T->user.id);
+        complete(T->lchild);
+        complete(T->rchild);
+    }
+
+}
+
+void complete_friend(AVLNode *T, int id)
+{
+    User user;
+    AVLNode *p;
+    if (T)
+    {
+        user.id = id;
+        p = SearchAVL(U, T->user.id);
+        set_insert(p->user.friends, user, taller);
+        complete_friend(T->lchild, id);
+        complete_friend(T->rchild, id);
+    }
+}
+
+void complete_fan(AVLNode *T, int id)   // T为follows集
+{
+    User user;
+    AVLNode *p;
+    if (T)
+    {
+        user.id = id;
+        p = SearchAVL(U, T->user.id);
+        set_insert(p->user.fans, user, taller);
+        complete_fan(T->lchild, id);
+        complete_fan(T->rchild, id);
+    }
+}
+
+void complete_follow(AVLNode *T, int id)    // T为fans集
+{
+    User user;
+    AVLNode *p;
+    if (T)
+    {
+        user.id = id;
+        p = SearchAVL(U, T->user.id);
+        set_insert(p->user.follows, user, taller);
+        complete_fan(T->lchild, id);
+        complete_fan(T->rchild, id);
     }
 }

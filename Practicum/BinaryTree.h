@@ -32,7 +32,7 @@ void SelectTree1or2(Set *&p);
 void PreOrder(AVLTree T);
 void InOrder(AVLTree T);
 void Select1or2(Set *&p);
-void SelectSet(Set *&p);
+int SelectSet(Set *&p, int &id_user);
 AVLNode *SelectUser(Set U);
 
 status InitAVL(AVLTree &T);

@@ -36,7 +36,8 @@ int main()
 {
     Set *p = NULL;   // pointer
     int op = 1;
-	int id;
+	int id, i;
+	int id_user = 0;
 	User user;
 
 	while (op)
@@ -263,7 +264,7 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 18:    // member_add
-                SelectSet(p);
+                SelectSet(p, id_user);
                 user = input_user();
                 if (set_insert(*p, user, taller))
                 {
@@ -278,22 +279,64 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 19:    // member_delete
-                SelectSet(p);
-                printf("请输入被删除人的id：");
-                scanf("%d", &id);getchar();
-                if (set_remove(*p, id, shorter))
+                i = SelectSet(p, id_user);  // i: set type
+                if (*p)
                 {
-                    printf("成员删除成功！\n");
+                    printf("请输入被删除人的id：");
+                    scanf("%d", &id);getchar();
+
+                    // 同步信息
+                    T1 = SearchAVL(U, id);  // 被删除人
+                    if (i == 1) // friends
+                    {
+                        // 同步被删除人的朋友集
+                        set_remove(T1->user.friends, id_user, shorter);
+                    }
+                    else if (i == 2) // fans
+                    {
+                        // 同步被删除人的关注集
+                        set_remove(T1->user.follows, id_user, shorter);
+                    }
+                    else if (i == 3) // follows
+                    {
+                        // 同步被删除人的粉丝集
+                        set_remove(T1->user.fans, id_user, shorter);
+                    }
+                    else if (i == 5) // users
+                    {
+                        // 同步除被删除人外其他所有人的集合信息
+                        for (int j = 1; (j < 101) && (j != id); j++)
+                        {
+                            T2 = SearchAVL(U, j);
+                            // 同步朋友集
+                            set_remove(T2->user.friends, id, shorter);
+                            // 同步关注集
+                            set_remove(T2->user.follows, id, shorter);
+                            // 同步粉丝集
+                            set_remove(T2->user.fans, id, shorter);
+                        }
+                    }
+
+                    // 删除该成员
+                    if (set_remove(*p, id, shorter))
+                    {
+                        printf("成员删除成功！\n");
+                    }
+                    else
+                    {
+                        printf("成员删除失败！\n");
+                    }
                 }
                 else
                 {
-                    printf("成员删除失败！\n");
+                    printf("该集合中不存在此id！\n");
                 }
+
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 20:    // member_search
-                SelectSet(p);
+                SelectSet(p, id_user);
                 printf("请输入需要查找的用户的id：");
                 scanf("%d", &id);getchar();
                 S = SearchAVL(*p, id);
@@ -309,7 +352,7 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 21:    // member_modify
-                SelectSet(p);
+                SelectSet(p, id_user);
                 printf("请输入需要修改的信息的id：");
                 scanf("%d", &id);getchar();
                 S = SearchAVL(*p, id);
@@ -415,7 +458,7 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 26:    // Traverse
-                SelectSet(p);
+                SelectSet(p, id_user);
                 printf("该集合的前序遍历序列为：\n");
                 PreOrderTraverse(*p);
                 printf("\n");
@@ -616,9 +659,9 @@ void Select1or2(Set *&p)
     }
 }
 
-void SelectSet(Set *&p)
+int SelectSet(Set *&p, int &id)
 {
-    int i;
+    int i;  // set type(special for member_delete)
     AVLNode *T;
 
     printf("你想对哪个集合进行操作：\n");
@@ -635,6 +678,7 @@ void SelectSet(Set *&p)
     else
     {
         T = SelectUser(U);
+        id = T->user.id;
         if (i == 1)
         {
            p = &T->user.friends;
@@ -652,6 +696,7 @@ void SelectSet(Set *&p)
             p = &T->user.hobbys;
         }
     }
+    return i;
 }
 
 AVLNode *SelectUser(Set U)
@@ -784,7 +829,8 @@ void LeftBalance(AVLTree &T)
     switch (lchild->bf)
     {
         case LH:
-            T->bf = lchild->bf = EH;
+            T->bf = EH;
+            lchild->bf = EH;
             R_Rotate(T);
             break;
         case EH:
@@ -801,7 +847,8 @@ void LeftBalance(AVLTree &T)
                     lchild->bf = EH;
                     break;
                 case EH:
-                    T->bf = lchild->bf = EH;
+                    T->bf = EH;
+                    lchild->bf = EH;
                     break;
                 case RH:
                     T->bf = EH;
@@ -867,12 +914,14 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
         {
             q = T;
             T = T->rchild;
+            free(q);
             shorter = true;
         }
         else if (T->rchild == NULL)
         {
             q = T;
             T = T->lchild;
+            free(q);
             shorter = true;
         }
         else
@@ -884,6 +933,27 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
             }
             T->user = q->user;
             DeleteAVL(T->lchild, q->user.id, shorter);
+            if (shorter)
+            {
+                switch (T->bf)
+                {
+                    case LH:
+                        T->bf = EH;
+                        shorter = true;
+                        break;
+                    case EH:
+                        T->bf = RH;
+                        shorter = false;
+                        break;
+                    case RH:
+                        if (T->rchild->bf == EH)
+                            shorter = false;
+                        else
+                            shorter = true;
+                        RightBalance(T);
+                        break;
+                }
+            }
         }
     }
     else if (id < T->user.id)
@@ -905,11 +975,11 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
                     shorter = false;
                     break;
                 case RH:
-                    RightBalance(T);
                     if (T->rchild->bf == EH)
                         shorter = false;
                     else
                         shorter = true;
+                    RightBalance(T);
                     break;
             }
         }
@@ -925,11 +995,11 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
             switch(T->bf)
             {
                 case LH:
-                    LeftBalance(T);
                     if (T->lchild->bf == EH)
                         shorter = false;
                     else
                         shorter = true;
+                    LeftBalance(T);
                     break;
                 case EH:
                     T->bf = LH;

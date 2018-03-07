@@ -11,6 +11,21 @@
 FILE *fp;
 bool taller, shorter;
 char filename[30] = "D:/SetData.txt";
+char username[100][7] = {
+    "赵一", "赵二", "赵三", "赵四", "赵五", "赵六", "赵七", "赵八", "赵九", "赵十",
+    "钱一", "钱二", "钱三", "钱四", "钱五", "钱六", "钱七", "钱八", "钱九", "钱十",
+    "孙一", "孙二", "孙三", "孙四", "孙五", "孙六", "孙七", "孙八", "孙九", "孙十",
+    "李一", "李二", "李三", "李四", "李五", "李六", "李七", "李八", "李九", "李十",
+    "周一", "周二", "周三", "周四", "周五", "周六", "周七", "周八", "周九", "周十",
+    "吴一", "吴二", "吴三", "吴四", "吴五", "吴六", "吴七", "吴八", "吴九", "吴十",
+    "郑一", "郑二", "郑三", "郑四", "郑五", "郑六", "郑七", "郑八", "郑九", "郑十",
+    "王一", "王二", "王三", "王四", "王五", "王六", "王七", "王八", "王九", "王十",
+    "陈一", "陈二", "陈三", "陈四", "陈五", "陈六", "陈七", "陈八", "陈九", "陈十",
+    "张一", "张二", "张三", "张四", "张五", "张六", "张七", "张八", "张九", "张十"
+};
+char hobbyname[10][7] = {
+    "篮球", "音乐", "电影", "国画", "写作", "阅读", "跑步", "跳舞", "聊天", "游戏"
+};
 
 Set U = NULL;   // users set
 Set S = NULL;
@@ -22,6 +37,7 @@ int main()
     Set *p = NULL;   // pointer
     int op = 1;
 	int id;
+	User user;
 
 	while (op)
 	{
@@ -29,37 +45,111 @@ int main()
 		printf("\n\n");
 		printf("      Menu for Set ADT On AVL Tree Structure \n");
 		printf("-------------------------------------------------\n");
-		printf("    	  1. set_init           9. set_subset\n");
-		printf("    	  2. set_destroy        10. set_equal\n");
-		printf("    	  3. set_insert         11. member_add\n");
-		printf("    	  4. set_remove         12. member_delete\n");
-		printf("    	  5. set_intersection   13. member_search\n");
-		printf("    	  6. set_union          14. member_modify\n");
-		printf("    	  7. set_difference     15. show_info\n");
-		printf("    	  8. set_member         16. indirect_friends\n");
-		printf("    	  17. commom_hobby      18. common_follow\n");
-		printf("    	  19. SaveData          20. ReadData\n");
-		printf("    	  21. CreateRandomData  22. Traverse\n");
-		printf("    	  23. set_traverse      0. Exit\n");
+		printf("    	  1. InitAVL            16. set_equal\n");
+		printf("    	  2. DestroyAVL         17. set_traverse\n");
+		printf("    	  3. SearchAVL          18. member_add\n");
+		printf("    	  4. InsertAVL          19. member_delete\n");
+		printf("    	  5. DeleteAVL          20. member_search\n");
+		printf("    	  6. TraverseAVL        21. member_modify\n");
+		printf("    	  7. set_init           22. show_info\n");
+		printf("    	  8. set_destroy        23. indirect_friends\n");
+		printf("    	  9. set_insert         24. common_follow\n");
+		printf("    	  10. set_remove        25. commom_hobby\n");
+		printf("    	  11. set_intersection  26. Traverse\n");
+		printf("    	  12. set_union         27. CreateRandomData\n");
+		printf("    	  13. set_difference    28. SaveData\n");
+		printf("    	  14. set_member        29. ReadData\n");
+		printf("    	  15. set_subset        0. Exit\n");
 		printf("-------------------------------------------------\n");
-		printf("    请选择你的操作[0~23]:");
+		printf("    请选择你的操作[0~29]:");
 		scanf("%d", &op);
 		switch (op)
 		{
-            case 1:     // init
-                set_init(T1);
+            case 1:     // InitAVL
+                SelectTree1or2(p);
+                InitAVL(*p);
                 printf("初始化成功！\n");
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 2:     // destroy
-                set_destroy(T1);
+            case 2:     // DestroyAVL
+                SelectTree1or2(p);
+                DestroyAVL(*p);
                 printf("销毁成功！\n");
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 3:     // insert
-                User user;
+            case 3:     // SearchAVL
+                SelectTree1or2(p);
+                printf("请输入需要查找的结点的key：");
+                scanf("%d", &id);getchar();
+                if (set_member(*p, id))
+                {
+                    printf("该树中有此人！\n");
+                }
+                else
+                {
+                    printf("该树中没有此人！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 4:     // InsertAVL
+                SelectTree1or2(p);
+                printf("请输入要插入的节点的key：");
+                scanf("%d", &user.id);getchar();
+                if (set_insert(*p, user, taller))
+                {
+                    printf("插入成功！\n");
+                }
+                else
+                {
+                    printf("插入失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 5:    // DeleteAVL
+                SelectTree1or2(p);
+                printf("请输入被删除的节点的key：");
+                scanf("%d", &id);getchar();
+                if (set_remove(*p, id, shorter))
+                {
+                    printf("删除成功！\n");
+                }
+                else
+                {
+                    printf("删除失败！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 6:     // TraverseAVL
+                SelectTree1or2(p);
+                printf("该AVL树的前序遍历序列为：\n");
+                PreOrder(*p);
+                printf("\n");
+                printf("该AVL树的中序遍历序列为：\n");
+                InOrder(*p);
+                printf("\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 7:     // set_init
+                Select1or2(p);
+                set_init(*p);
+                printf("初始化成功！\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 8:     // set_destroy
+                Select1or2(p);
+                set_destroy(*p);
+                printf("销毁成功！\n");
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 9:     // set_insert
                 Select1or2(p);
                 printf("请输入用户的id：");
                 scanf("%d", &user.id);getchar();
@@ -74,7 +164,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 4:     // remove
+            case 10:    // set_remove
                 Select1or2(p);
                 printf("请输入被删除人的id：");
                 scanf("%d", &id);getchar();
@@ -89,7 +179,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 5:     // intersection
+            case 11:    // set_intersection
                 set_init(S);
                 if (set_intersection(T1, T2, S))
                 {
@@ -104,7 +194,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 6:     // union
+            case 12:    // union
                 if (set_union(T1, T2))
                 {
                     printf("并集操作成功！\n");
@@ -118,7 +208,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 7:     // difference
+            case 13:    // difference
                 if (set_diffrence(T1, T2))
                 {
                     printf("差集操作成功！\n");
@@ -132,7 +222,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 8:     // member
+            case 14:    // member
                 Select1or2(p);
                 printf("请输入id：");
                 scanf("%d", &id);getchar();
@@ -147,19 +237,19 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 9:     // subset
+            case 15:    // subset
                 if (set_subset(T1, T2))
                 {
-                    printf("是子集！\n");
+                    printf("集合2是集合1的子集！\n");
                 }
                 else
                 {
-                    printf("不是子集！\n");
+                    printf("集合2不是集合1的子集！\n");
                 }
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 10:    // equal
+            case 16:    // equal
                 if (set_equal(T1, T2))
                 {
                     printf("两个集合相同！\n");
@@ -171,7 +261,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 11:    // member_add
+            case 18:    // member_add
                 SelectSet(p);
                 user = input_user();
                 if (set_insert(*p, user, taller))
@@ -185,7 +275,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 12:    // member_delete
+            case 19:    // member_delete
                 SelectSet(p);
                 printf("请输入被删除人的id：");
                 scanf("%d", &id);getchar();
@@ -200,7 +290,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 13:    // member_search
+            case 20:    // member_search
                 SelectSet(p);
                 printf("请输入需要查找的用户的id：");
                 scanf("%d", &id);getchar();
@@ -216,23 +306,16 @@ int main()
                 }
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 14:    // member_modify
+            case 21:    // member_modify
                 SelectSet(p);
                 printf("请输入需要修改的信息的id：");
                 scanf("%d", &id);getchar();
                 S = SearchAVL(*p, id);
                 if (S)
                 {
-                    printf("请输入修改后的新id：");
-                    scanf("%d", &user.id);getchar();
-                    if (set_remove(*p, id, taller) && set_insert(*p, user, taller))
-                    {
-                        printf("修改成功！\n");
-                    }
-                    else
-                    {
-                        printf("修改失败！\n");
-                    }
+                    printf("请输入修改后的新姓名：");
+                    scanf("%s", S->user.name);getchar();
+                    printf("修改成功！\n");
                 }
                 else
                 {
@@ -241,7 +324,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 15:    // Traverse
+            case 22:    // show_info
                 S = SelectUser(U);
                 if (S)
                 {
@@ -254,7 +337,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 16:    // indirect_friends
+            case 23:    // indirect_friends
                 set_init(T1);
                 S = SelectUser(U);
                 if (S)
@@ -271,7 +354,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 17:    // common_hobby
+            case 25:    // common_hobby
                 set_init(T1);
                 set_init(T2);
                 set_init(S);
@@ -283,7 +366,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 18:    // common_follow
+            case 24:    // common_follow
                 set_init(T1);
                 set_init(T2);
                 set_init(S);
@@ -295,7 +378,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 19:    // Save
+            case 28:    // Save
                 if (SaveData(U))
                 {
                     printf("数据保存成功！\n");
@@ -307,7 +390,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 20:    // Load
+            case 29:    // Load
                 if (ReadData(U))
                 {
                     printf("数据读取成功！\n");
@@ -319,7 +402,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 21:    // create random data
+            case 27:    // create random data
                 for (int id = 1; id < 31; id++)
                 {
                     Sleep(1000);
@@ -329,7 +412,7 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 22:    // Traverse
+            case 26:    // Traverse
                 SelectSet(p);
                 printf("该集合的前序遍历序列为：\n");
                 PreOrderTraverse(*p);
@@ -340,18 +423,18 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 23:    // set_traverse
+            case 17:    // set_traverse
                 Select1or2(p);
                 printf("该集合的前序遍历序列为：\n");
-                PreOrderTraverse(*p);
+                PreOrder(*p);
                 printf("\n");
                 printf("该集合的中序遍历序列为：\n");
-                InOrderTraverse(*p);
+                InOrder(*p);
                 printf("\n");
 
                 printf("输入任意键继续。。。");getch();
                 break;
-		    case 0:
+		    case 0:     // exit
                 break;
         }
     }
@@ -367,6 +450,7 @@ User create_user(int id)
     int num_hobbys;
 
     user.id = id;
+    strcpy(user.name, username[id-1]);
     set_init(user.fans);
     set_init(user.friends);
     set_init(user.follows);
@@ -407,6 +491,7 @@ User create_user(int id)
     for (int i = 0; i < num_hobbys; i++)
     {
         hobby.id = 1 + rand() % 10;
+        strcpy(hobby.name, hobbyname[hobby.id-1]);
         set_insert(user.hobbys, hobby, taller);
     }
 
@@ -415,6 +500,7 @@ User create_user(int id)
 
 void show_info(AVLNode *T)
 {
+    printf("该用户的名字为：%s\n", T->user.name);
     printf("该用户的朋友有：\n");
     TraverseAVL(T->user.friends);
     printf("该用户的粉丝有：\n");
@@ -422,7 +508,8 @@ void show_info(AVLNode *T)
     printf("该用户关注的人有：\n");
     TraverseAVL(T->user.follows);
     printf("该用户的爱好有：\n");
-    TraverseAVL(T->user.hobbys);
+    InOrderTraverseHobby(T->user.hobbys);
+    printf("\n");
 }
 
 User input_user()
@@ -435,6 +522,8 @@ User input_user()
     printf("请输入用户的id：");
     scanf("%d", &id_user);getchar();
     user.id = id_user;
+    printf("请输入用户的姓名：");
+    scanf("%s", user.name);getchar();
     set_init(user.friends);
     set_init(user.fans);
     set_init(user.follows);
@@ -479,12 +568,29 @@ User input_user()
         if (id_hobby > 0)
         {
             hobby.id = id_hobby;
+            printf("请输入爱好：");
+            scanf("%s", hobby.name);getchar();
             set_insert(user.hobbys, hobby, taller);
         }
         else break;
     }
 
     return user;
+}
+
+void SelectTree1or2(Set *&p)
+{
+    int i;
+    printf("请选择AVL树(1 or 2)：");
+    scanf("%d", &i);getchar();
+    if (i == 1)
+    {
+        p = &T1;
+    }
+    else if (i == 2)
+    {
+        p = &T2;
+    }
 }
 
 void Select1or2(Set *&p)
@@ -831,6 +937,46 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter)
     return OK;
 }
 
+void InOrder(AVLTree T)
+{
+    if (T)
+    {
+        InOrder(T->lchild);
+        printf("%d ", T->user.id);
+        InOrder(T->rchild);
+    }
+}
+
+void PreOrder(AVLTree T)
+{
+    if (T)
+    {
+        printf("%d ", T->user.id);
+        PreOrder(T->lchild);
+        PreOrder(T->rchild);
+    }
+}
+
+void PreOrderTraverseHobby(Set S)
+{
+    if (S)
+    {
+        printf("%d%s", S->user.id, S->user.name);
+        PreOrderTraverseHobby(S->lchild);
+        PreOrderTraverseHobby(S->rchild);
+    }
+}
+
+void InOrderTraverseHobby(Set S)
+{
+    if (S)
+    {
+        InOrderTraverseHobby(S->lchild);
+        printf("%d%s ", S->user.id, S->user.name);
+        InOrderTraverseHobby(S->rchild);
+    }
+}
+
 status TraverseAVL(AVLTree T)
 {
     InOrderTraverse(T);
@@ -840,9 +986,11 @@ status TraverseAVL(AVLTree T)
 
 void PreOrderTraverse(AVLTree T)
 {
+    AVLNode *p;
     if (T)
     {
-        printf("%d ", T->user.id);
+        p = SearchAVL(U, T->user.id);
+        printf("%d%s ", T->user.id, p->user.name);
         PreOrderTraverse(T->lchild);
         PreOrderTraverse(T->rchild);
      }
@@ -850,10 +998,12 @@ void PreOrderTraverse(AVLTree T)
 
 void InOrderTraverse(AVLTree T)
 {
+    AVLNode *p;
     if (T)
     {
         InOrderTraverse(T->lchild);
-        printf("%d ", T->user.id);
+        p = SearchAVL(U, T->user.id);
+        printf("%d%s ", T->user.id, p->user.name);
         InOrderTraverse(T->rchild);
     }
 }
@@ -990,6 +1140,8 @@ status ReadData(Set &U)
         fread(&id_user, sizeof(int), 1, fp);    // id_user
         user.id = id_user;
 
+        fread(user.name, sizeof(char), 7, fp);  // name_user
+
         fread(&num_friends, sizeof(int), 1, fp);    // num_friends
         set_init(user.friends);
         for (int j = 0; j < num_friends; j++)
@@ -1025,6 +1177,7 @@ status ReadData(Set &U)
         for (int j = 0; j < num_hobbys; j++)
         {
             fread(&id_hobby, sizeof(int), 1, fp);  // id_hobby
+            fread(hobby.name, sizeof(char), 7, fp);// name_hobby
             hobby.id = id_hobby;
             hobby.fans = hobby.follows = hobby.friends = NULL;
             set_insert(user.hobbys, hobby, taller);
@@ -1074,6 +1227,7 @@ void SaveUser(Set T)
     int num;
 
     fwrite(&(T->user.id), sizeof(int), 1, fp);    // id_user
+    fwrite(T->user.name, sizeof(char), 7, fp);    // name_user
 
     num = set_size(T->user.friends);
     fwrite(&num, sizeof(int), 1, fp);   // num_friends
@@ -1089,9 +1243,8 @@ void SaveUser(Set T)
 
     num = set_size(T->user.hobbys);
     fwrite(&num, sizeof(int), 1, fp);   // num_hobby
-    SaveUserId(T->user.hobbys);         // id_hobby
+    SaveHobby(T->user.hobbys);          // id_hobby and name_hobby
 }
-
 
 void SaveUserId(Set T)
 {
@@ -1100,5 +1253,16 @@ void SaveUserId(Set T)
         fwrite(&(T->user.id), sizeof(int), 1, fp);
         SaveUserId(T->lchild);
         SaveUserId(T->rchild);
+    }
+}
+
+void SaveHobby(Set T)
+{
+    if (T)
+    {
+        fwrite(&(T->user.id), sizeof(int), 1, fp);
+        fwrite(T->user.name, sizeof(char), 7, fp);
+        SaveHobby(T->lchild);
+        SaveHobby(T->rchild);
     }
 }

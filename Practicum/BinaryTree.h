@@ -12,7 +12,8 @@
 typedef int status;
 
 typedef struct User {
-    int id;     // id_user or id_hobby
+    int id;         // id_user or id_hobby
+    char name[7];   // name_user or name_hobby
     struct AVLNode *friends, *fans, *follows;// sets
     struct AVLNode *hobbys;
 } User;
@@ -27,6 +28,9 @@ typedef AVLTree Set;
 
 void show_info(AVLNode *T);
 User input_user();
+void SelectTree1or2(Set *&p);
+void PreOrder(AVLTree T);
+void InOrder(AVLTree T);
 void Select1or2(Set *&p);
 void SelectSet(Set *&p);
 AVLNode *SelectUser(Set U);
@@ -39,6 +43,8 @@ status DeleteAVL(AVLTree &T, int id, bool &shorter);
 status TraverseAVL(AVLTree T);
 void PreOrderTraverse(AVLTree T);
 void InOrderTraverse(AVLTree T);
+void InOrderTraverseHobby(Set S);
+void PreOrderTraverseHobby(Set S);
 
 void R_Rotate(AVLTree &T);
 void L_Rotate(AVLTree &T);
@@ -63,6 +69,7 @@ status ReadData(Set &U);
 void SaveUsers(Set U);
 void SaveUser(Set T);
 void SaveUserId(Set T);
+void SaveHobby(Set T);
 
 User create_user(int id);
 void TraverseFriends(Set S, Set &F);

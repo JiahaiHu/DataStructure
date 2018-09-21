@@ -67,73 +67,107 @@ int main()
 		scanf("%d", &op);
 		switch (op)
 		{
+            case 99:
+                complete(U);
+                break;
             case 1:     // InitAVL
-                SelectTree1or2(p);
+                p = &T1;
                 InitAVL(*p);
                 printf("初始化成功！\n");
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 2:     // DestroyAVL
-                SelectTree1or2(p);
-                DestroyAVL(*p);
-                printf("销毁成功！\n");
+                if (p)
+                {
+                    DestroyAVL(*p);
+                    printf("销毁成功！\n");
+                    p = NULL;
+                }
+                else
+                {
+                    printf("不存在AVL树！\n");
+                }
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 3:     // SearchAVL
-                SelectTree1or2(p);
-                printf("请输入需要查找的结点的key：");
-                scanf("%d", &id);getchar();
-                if (set_member(*p, id))
+                if (p)
                 {
-                    printf("该树中有此人！\n");
+                    printf("请输入需要查找的结点的key：");
+                    scanf("%d", &id);getchar();
+                    if (set_member(*p, id))
+                    {
+                        printf("该树中有此结点！\n");
+                    }
+                    else
+                    {
+                        printf("该树中没有此结点！\n");
+                    }
                 }
                 else
                 {
-                    printf("该树中没有此人！\n");
+                    printf("不存在AVL树！\n");
                 }
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 4:     // InsertAVL
-                SelectTree1or2(p);
-                printf("请输入要插入的节点的key：");
-                scanf("%d", &user.id);getchar();
-                if (set_insert(*p, user, taller))
+                if (p)
                 {
-                    printf("插入成功！\n");
+                    printf("请输入要插入的结点的key：");
+                    scanf("%d", &user.id);getchar();
+                    if (set_insert(*p, user, taller))
+                    {
+                        printf("插入成功！\n");
+                    }
+                    else
+                    {
+                        printf("插入失败！\n");
+                    }
                 }
                 else
                 {
-                    printf("插入失败！\n");
+                    printf("不存在AVL树！\n");
                 }
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 5:    // DeleteAVL
-                SelectTree1or2(p);
-                printf("请输入被删除的节点的key：");
-                scanf("%d", &id);getchar();
-                if (set_remove(*p, id, shorter))
+                if (p)
                 {
-                    printf("删除成功！\n");
+                    printf("请输入被删除的结点的key：");
+                    scanf("%d", &id);getchar();
+                    if (set_remove(*p, id, shorter))
+                    {
+                        printf("删除成功！\n");
+                    }
+                    else
+                    {
+                        printf("删除失败！\n");
+                    }
                 }
                 else
                 {
-                    printf("删除失败！\n");
+                    printf("不存在AVL树！\n");
                 }
 
                 printf("输入任意键继续。。。");getch();
                 break;
             case 6:     // TraverseAVL
-                SelectTree1or2(p);
-                printf("该AVL树的前序遍历序列为：\n");
-                PreOrder(*p);
-                printf("\n");
-                printf("该AVL树的中序遍历序列为：\n");
-                InOrder(*p);
-                printf("\n");
+                if (p)
+                {
+                    printf("该AVL树的前序遍历序列为：\n");
+                    PreOrder(*p);
+                    printf("\n");
+                    printf("该AVL树的中序遍历序列为：\n");
+                    InOrder(*p);
+                    printf("\n");
+                }
+                else
+                {
+                    printf("不存在AVL树！\n");
+                }
 
                 printf("输入任意键继续。。。");getch();
                 break;
@@ -153,7 +187,7 @@ int main()
                 break;
             case 9:     // set_insert
                 Select1or2(p);
-                printf("请输入用户的id：");
+                printf("请输入集合元素的key：");
                 scanf("%d", &user.id);getchar();
                 if (set_insert(*p, user, taller))
                 {
@@ -168,7 +202,7 @@ int main()
                 break;
             case 10:    // set_remove
                 Select1or2(p);
-                printf("请输入被删除人的id：");
+                printf("请输入被删除元素的key：");
                 scanf("%d", &id);getchar();
                 if (set_remove(*p, id, shorter))
                 {
@@ -186,8 +220,12 @@ int main()
                 if (set_intersection(T1, T2, S))
                 {
                     printf("交集操作成功！\n");
-                    printf("两个集合的交集为：\n");
-                    TraverseAVL(S);
+                    printf("结果集合为：\n");
+                    InOrder(S);
+                    printf("\n");
+                    printf("其内部实现AVL树的前序遍历序列为：\n");
+                    PreOrder(S);
+                    printf("\n");
                 }
                 else
                 {
@@ -200,8 +238,12 @@ int main()
                 if (set_union(T1, T2))
                 {
                     printf("并集操作成功！\n");
-                    printf("两个集合的并集为：\n");
-                    TraverseAVL(T1);
+                    printf("结果集合为：\n");
+                    InOrder(T1);
+                    printf("\n");
+                    printf("其内部实现AVL树的前序遍历序列为：\n");
+                    PreOrder(T1);
+                    printf("\n");
                 }
                 else
                 {
@@ -214,8 +256,12 @@ int main()
                 if (set_diffrence(T1, T2))
                 {
                     printf("差集操作成功！\n");
-                    printf("两个集合的差集为：\n");
-                    TraverseAVL(T1);
+                    printf("结果集合为：\n");
+                    InOrder(T1);
+                    printf("\n");
+                    printf("其内部实现AVL树的前序遍历序列为：\n");
+                    PreOrder(T1);
+                    printf("\n");
                 }
                 else
                 {
@@ -226,15 +272,15 @@ int main()
                 break;
             case 14:    // member
                 Select1or2(p);
-                printf("请输入id：");
+                printf("请输入元素的key：");
                 scanf("%d", &id);getchar();
                 if (set_member(*p, id))
                 {
-                    printf("集合中有此人！\n");
+                    printf("集合中有此元素！\n");
                 }
                 else
                 {
-                    printf("集合中没有此人！\n");
+                    printf("集合中没有此元素！\n");
                 }
 
                 printf("输入任意键继续。。。");getch();
@@ -264,8 +310,23 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 18:    // member_add
-                SelectSet(p, id_user);
-                user = input_user();
+                i = SelectSet(p, id_user);
+                if (i == 5)     // users
+                {
+                    user = input_user();
+                }
+                else if (i == 4)    // hobbys
+                {
+                    printf("请输入新增爱好的id：");
+                    scanf("%d", &user.id);
+                    printf("请输入爱好：");
+                    scanf("%s", user.name);
+                }
+                else
+                {
+                    printf("请输入新增成员的id：");
+                    scanf("%d", &user.id);
+                }
                 if (set_insert(*p, user, taller))
                 {
                     complete(U);
@@ -305,15 +366,18 @@ int main()
                     else if (i == 5) // users
                     {
                         // 同步除被删除人外其他所有人的集合信息
-                        for (int j = 1; (j < 101) && (j != id); j++)
+                        for (int j = 1; j <= NUM_USER; j++)
                         {
-                            T2 = SearchAVL(U, j);
-                            // 同步朋友集
-                            set_remove(T2->user.friends, id, shorter);
-                            // 同步关注集
-                            set_remove(T2->user.follows, id, shorter);
-                            // 同步粉丝集
-                            set_remove(T2->user.fans, id, shorter);
+                            if (j != id)
+                            {
+                                T2 = SearchAVL(U, j);
+                                // 同步朋友集
+                                set_remove(T2->user.friends, id, shorter);
+                                // 同步关注集
+                                set_remove(T2->user.follows, id, shorter);
+                                // 同步粉丝集
+                                set_remove(T2->user.fans, id, shorter);
+                            }
                         }
                     }
 
@@ -336,19 +400,37 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 20:    // member_search
-                SelectSet(p, id_user);
-                printf("请输入需要查找的用户的id：");
-                scanf("%d", &id);getchar();
-                S = SearchAVL(*p, id);
-                if (S)
-                {
-                    printf("该用户在此集合中！\n");
-                    show_info(SearchAVL(U, id));
+                i = SelectSet(p, id_user);
+                if (i == 4){
+                    printf("请输入需要查找的爱好的id：");
+                    scanf("%d", &id);getchar();
+                    S = SearchAVL(*p, id);
+                    if (S)
+                    {
+                        printf("该爱好在此集合中！\n");
+                        printf("该爱好为%s\n", S->user.name);
+                    }
+                    else
+                    {
+                        printf("搜索不到该爱好！\n");
+                    }
                 }
                 else
                 {
-                    printf("搜索不到该成员！\n");
+                    printf("请输入需要查找的用户的id：");
+                    scanf("%d", &id);getchar();
+                    S = SearchAVL(*p, id);
+                    if (S)
+                    {
+                        printf("该成员在此集合中！\n");
+                        show_info(SearchAVL(U, id));
+                    }
+                    else
+                    {
+                        printf("搜索不到该成员！\n");
+                    }
                 }
+
                 printf("输入任意键继续。。。");getch();
                 break;
             case 21:    // member_modify
@@ -406,8 +488,16 @@ int main()
                 T1 = SelectUser(U);
                 T2 = SelectUser(U);
                 set_intersection(T1->user.hobbys, T2->user.hobbys, S);
-                printf("两个用户共同的爱好有：\n");
-                TraverseAVL(S);
+                if (S)
+                {
+                    printf("两个用户共同的爱好有：\n");
+                    TraverseHobby(S, T1->user.hobbys);
+                    printf("\n");
+                }
+                else
+                {
+                    printf("两个用户没有共同的爱好！\n");
+                }
 
                 printf("输入任意键继续。。。");getch();
                 break;
@@ -418,8 +508,15 @@ int main()
                 T1 = SelectUser(U);
                 T2 = SelectUser(U);
                 set_intersection(T1->user.follows, T2->user.follows, S);
-                printf("两个用户共同关注的人有：\n");
-                TraverseAVL(S);
+                if (S)
+                {
+                    printf("两个用户共同关注的人有：\n");
+                    TraverseAVL(S);
+                }
+                else
+                {
+                    printf("两个用户没有共同关注的人！\n");
+                }
 
                 printf("输入任意键继续。。。");getch();
                 break;
@@ -448,11 +545,12 @@ int main()
                 printf("输入任意键继续。。。");getch();
                 break;
             case 27:    // create random data
-                for (int id = 1; id < 31; id++)
+                for (int id = 1; id <= NUM_USER; id++)
                 {
                     Sleep(1000);
                     set_insert(U, create_user(id), taller);
                 }
+                complete(U);
                 printf("随机生成数据成功！\n");
 
                 printf("输入任意键继续。。。");getch();
@@ -479,9 +577,59 @@ int main()
 
                 printf("输入任意键继续。。。");getch();
                 break;
-            case 30:    // complete
-                complete(U);
-                printf("关系补全完成！\n");
+            case 30:    // LoadTreeTestCase
+                if (p)
+                {
+                    InitAVL(T1);
+                    user.id = 4;
+                    set_insert(T1, user, taller);
+                    user.id = 5;
+                    set_insert(T1, user, taller);
+                    user.id = 11;
+                    set_insert(T1, user, taller);
+                    user.id = 12;
+                    set_insert(T1, user, taller);
+                    user.id = 13;
+                    set_insert(T1, user, taller);
+                    user.id = 15;
+                    set_insert(T1, user, taller);
+                    user.id = 22;
+                    set_insert(T1, user, taller);
+                    user.id = 28;
+                    set_insert(T1, user, taller);
+                    printf("成功加载测试数据！\n");
+                }
+                else
+                {
+                    printf("不存在AVL树！\n");
+                }
+
+                printf("输入任意键继续。。。");getch();
+                break;
+            case 31:    // LoadSetTestCase
+                InitAVL(T1);
+                user.id = 5;
+                set_insert(T1, user, taller);
+                user.id = 4;
+                set_insert(T1, user, taller);
+                user.id = 12;
+                set_insert(T1, user, taller);
+                user.id = 11;
+                set_insert(T1, user, taller);
+                user.id = 15;
+                set_insert(T1, user, taller);
+                InitAVL(T2);
+                user.id = 5;
+                set_insert(T2, user, taller);
+                user.id = 4;
+                set_insert(T2, user, taller);
+                user.id = 15;
+                set_insert(T2, user, taller);
+                user.id = 1;
+                set_insert(T2, user, taller);
+                user.id = 20;
+                set_insert(T2, user, taller);
+                printf("成功加载测试数据！\n");
 
                 printf("输入任意键继续。。。");getch();
                 break;
@@ -511,7 +659,7 @@ User create_user(int id)
     num_fans = 1 + rand() % 10;
     for (int i = 0; i < num_fans; i++)
     {
-        fan.id = 1 + rand() % 30;
+        fan.id = 1 + rand() % NUM_USER;
         set_insert(user.fans, fan, taller);
     }
     set_remove(user.fans, id, shorter);
@@ -521,7 +669,7 @@ User create_user(int id)
     num_friends = 1 + rand() % 10;
     for (int i = 0; i < num_friends; i++)
     {
-        frd.id = 1 + rand() % 30;
+        frd.id = 1 + rand() % NUM_USER;
         set_insert(user.friends, frd, taller);
     }
     set_remove(user.friends, id, shorter);
@@ -531,7 +679,7 @@ User create_user(int id)
     num_follows = 1 + rand() % 10;
     for (int i = 0; i < num_follows; i++)
     {
-        follow.id = 1 + rand() % 30;
+        follow.id = 1 + rand() % NUM_USER;
         set_insert(user.follows, follow, taller);
     }
     set_remove(user.follows, id, shorter);
@@ -1032,6 +1180,29 @@ void PreOrder(AVLTree T)
         printf("%d ", T->user.id);
         PreOrder(T->lchild);
         PreOrder(T->rchild);
+    }
+}
+
+void TraverseHobby(Set S, AVLNode *T)
+{
+    if (S)
+    {
+        TraverseHobby(S->lchild, T);
+        PrintHobby(T, S->user.id);
+        TraverseHobby(S->rchild, T);
+    }
+}
+
+void PrintHobby(AVLNode *T, int id)
+{
+    if (T)
+    {
+        PrintHobby(T->lchild, id);
+        if (T->user.id == id)
+        {
+            printf("%d%s ", id, T->user.name);
+        }
+        PrintHobby(T->rchild, id);
     }
 }
 

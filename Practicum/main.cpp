@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <Windows.h>
+#define NUM_USER 100
 
 FILE *fp;
 bool taller, shorter;
@@ -60,8 +61,8 @@ int main()
 		printf("    	  12. set_union         27. CreateRandomData\n");
 		printf("    	  13. set_difference    28. SaveData\n");
 		printf("    	  14. set_member        29. ReadData\n");
-		printf("    	  15. set_subset        30. Complete\n");
-		printf("    	  0. Exit\n");
+		printf("    	  15. set_subset        30. LoadTreeTestCase\n");
+		printf("    	  0. Exit               31. LoadSetTestCase\n");
 		printf("-------------------------------------------------\n");
 		printf("    请选择你的操作[0~29]:");
 		scanf("%d", &op);
